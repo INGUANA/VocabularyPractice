@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Vocabulary Practice</string>
+
+    <!--Main Menu Fragment-->
+    <string name="fragment_main_menu_exit">Exit</string>
+    <string name="fragment_main_menu_settings">Settings</string>
+    <string name="fragment_main_menu_japanese_to_english">Jap to Eng</string>
+    <string name="fragment_main_menu_english_to_japanese">Eng to Jap</string>
+    <string name="fragment_main_menu_start">Start</string>
+    <string name="fragment_main_menu_tooltip_text_settings">Select which language the known word is from, and to what language you will be trying to translate it.</string>
+
+
+
 </resources>

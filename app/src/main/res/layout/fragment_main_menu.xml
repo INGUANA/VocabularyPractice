@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/btStartMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/fragment_main_menu_start"
+        app:layout_constraintBottom_toTopOf="@+id/btSettingsMmf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/btSettingsMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/margin_top_button"
+        android:text="@string/fragment_main_menu_english_to_japanese"
+        app:layout_constraintBottom_toTopOf="@+id/btExitMmf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btStartMmf" />
+
+    <Button
+        android:id="@+id/btExitMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/margin_top_button"
+        android:text="@string/fragment_main_menu_exit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btSettingsMmf" />
+
+    <!-- TODO: image info icon-->
+    <ImageButton
+        android:id="@+id/ibSettingsInformationMmf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_start"
+        app:layout_constraintTop_toTopOf="@id/btSettingsMmf"
+        app:layout_constraintBottom_toBottomOf="@id/btSettingsMmf"
+        app:layout_constraintStart_toEndOf="@id/btSettingsMmf"/>
+
+    <TextView
+        android:id="@+id/tvTooltipTextMmf"
+        android:layout_width="@dimen/popup_width"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="@string/fragment_main_menu_tooltip_text_settings"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/ibSettingsInformationMmf"
+        app:layout_constraintStart_toStartOf="@id/ibSettingsInformationMmf"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
