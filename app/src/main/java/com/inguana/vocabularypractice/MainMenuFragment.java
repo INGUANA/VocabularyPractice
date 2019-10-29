@@ -25,7 +25,8 @@ public class MainMenuFragment extends Fragment {
     private Button  btStartMmf, btSettingsMmf, btExitMmf;
     private ImageButton ibSettingsInformationMmf;
     private TranslationMode translationMode;
-    private TextView tvTooltipTextMmf;
+    private TextView tvTooltipTextMmf;//overlayDialog = new Dialog(getContext(), R.style.Theme_AppCompat);
+    //overlayDialog.setCancelable(false);
 
     public void initialize(View view, ViewGroup container) {
         btStartMmf = view.findViewById(R.id.btStartMmf);

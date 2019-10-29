@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tvSourceWordMmf"
+        android:layout_width="@dimen/textView_width"
+        android:layout_height="@dimen/textview_height"
+        android:text="NOTHING"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btRevealMmf"/>
+
+    <Button
+        android:id="@+id/btRevealMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/fragment_word_guess_reveal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvTranslatedWordMmf"
+        app:layout_constraintTop_toBottomOf="@id/tvSourceWordMmf" />
+
+    <TextView
+        android:id="@+id/tvTranslatedWordMmf"
+        android:layout_width="@dimen/textView_width"
+        android:layout_height="@dimen/textview_height"
+        android:text="ANOTHA NOTHING"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/btRevealMmf"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/btMainMenuMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height_medium"
+        android:text="@string/fragment_word_guess_main_menu"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
