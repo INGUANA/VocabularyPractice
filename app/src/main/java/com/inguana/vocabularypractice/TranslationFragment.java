@@ -18,7 +18,7 @@ public class TranslationFragment extends Fragment {
         @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_word_guess, container, false);
         initialize(view, container);
         return view;
     }

@@ -14,8 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -23,11 +25,8 @@ import com.inguana.vocabularypractice.rest.response.BaseResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainMenuFragment extends Fragment {
@@ -45,6 +44,8 @@ public class MainMenuFragment extends Fragment {
     private Dialog overlayDialog;
     private StorageReference mStorageRef;
     private MainActivity activity;
+    private Task firebaseTask;
+    private CircularProgressView pbProgressBarMmf;
 
     private static final String VOCABULARY_WORDS_PATH = "google-10000-english.txt";
     //private static final String VOCABULARY_WORDS_URI = "gs://vocabularypractice-dae13.appspot.com/google-10000-english.txt";
@@ -66,6 +67,8 @@ public class MainMenuFragment extends Fragment {
         overlayDialog.setCancelable(true);
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        pbProgressBarMmf = view.findViewById(R.id.pbProgressBarMmf);
 
         activity = ((MainActivity) getActivity());
     }
@@ -122,47 +125,21 @@ public class MainMenuFragment extends Fragment {
     }
 
     private void onClickStartWordGuess() {
-        //TODO: initialize next fragment, close this one
         //translationMode in main activity maybe
         Bundle startButtonBundle = new Bundle();
         startButtonBundle.putSerializable("translationMode", translationMode);
         MainMenuFragment mainMenuFragment = new MainMenuFragment();
         mainMenuFragment.setArguments(startButtonBundle);
 
-        //TODO: thread the call of storage and the download. As soon as it finishes, move to second fragment
+        pbProgressBarMmf.setVisibility(View.VISIBLE);
+        downloadFirebaseFile();
+
 
         //if inNetworkAvailable
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    downloadFirebaseFile();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //show error message or go to next activity when youve stored the text file
-                            //if there are no words in vocab {and i = 5 (aka this is the last call)} show error message( should examine this in finally of finally (run thread)
-                            //if there is at least one word -> go into the next fragment
-                            if (!activity.translationPairList.isEmpty()) {
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new TranslationFragment()).commit();
-                            }
-                        }
-                    });
-                }
-
-
-            }
-        }).start();
-        //getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, mainMenuFragment).commit();
         //make it as modular as possible, here comes the new curent fragment declaration, but is there another way besides ((MainActivity)getActivity().....
     }
 
+    //do asynchronous call on firebase. when returned do synchronous 5 calls for getting word transations from the retrieved firebase words
     private void downloadFirebaseFile() {
         final StorageReference vocabularyFirebaseRef = mStorageRef.child(VOCABULARY_WORDS_PATH);
         final File checkFileInstance = new File("vocabulary.txt");
@@ -179,38 +156,26 @@ public class MainMenuFragment extends Fragment {
             activity.displayDialog("Error", "Something went wrong with files.", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         }
         final String instanceLocalFile = localFile.getPath();
-        vocabularyFirebaseRef.getFile(localFile)//asynchronous
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Successfully downloaded data to local file
-                        activity.vocabulary = new Vocabulary(instanceLocalFile);
-                        getTranslationRequest();
-                        /*getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                activity.displayDialog("Success", "Retrieved vocabulary: " + activity.vocabulary.getVocabularyWords().get((int) (Math.random() * 10000) + 1) + "!!!", R.drawable.pdlg_icon_success, R.color.pdlg_color_blue);
-                            }
-                        });*/
+        firebaseTask = vocabularyFirebaseRef.getFile(localFile);//asynchronous
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+        firebaseTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                // Successfully downloaded data to local file
+                activity.vocabulary = new Vocabulary(instanceLocalFile);
+                getTranslationRequest();
+
+            }
+        });
+        firebaseTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle failed download
                 vocabularyFirebaseRef.delete();
-                /*getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        activity.displayDialog("Error", "Failed to download the vocabulary file.", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
-
-                    }
-                });*/
+                pbProgressBarMmf.setVisibility(View.GONE);
             }
         });
     }
-
-    ////////////////
 
     public void getTranslationRequest() { //do 5 calls and get the results into the array
 
@@ -218,6 +183,7 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void run() {
                 try {
+
                     final APIInterface APIInterface = JsonGetter.buildService(APIInterface.class);
 
                     for (int i = 0; 5 > i; i++) {
@@ -226,28 +192,6 @@ public class MainMenuFragment extends Fragment {
                         //Call<Object> call = APIInterface.getLangs("dict.1.1.20191113T191908Z.b09388c3c67363c8.a16b9135d70ffed223b2a9e83d3ae4d1cc3b95f7"); dictionary call
                         try {
                             Response<BaseResponse> response = call.execute(
-                                    //===================================================================
-                                    // code that would go for enqueue and not for execute
-                    /*new Callback<BaseResponse>() {
-                @Override
-                public void onResponse(Call<BaseResponse> request, Response<BaseResponse> response) {
-                    if (MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()) {
-                        activity.translationPairList.add(response.body().getText().get(0));
-                    } else {
-                        //dont display message
-                        //activity.displayDialog("Error", "There is no such word to translate.<HiddenMessage>", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
-                    }
-                    //activity.displayDialog("Success", "got translation", R.drawable.pdlg_icon_success, R.color.pdlg_color_blue);
-                }
-
-                @Override
-                public void onFailure(Call<BaseResponse> request, Throwable t) {
-                    //do whatever with response (error)
-                    activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
-                }
-
-            }*/
-                                    //===================================================================
                             );
                             if (MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()) {
                                 activity.translationPairList.add(response.body().getText().get(0));
@@ -257,16 +201,24 @@ public class MainMenuFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                    }
-                });
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //TODO: SEMI-DONE1. Add circularProgressBar
+                            //      DONE2. Add next fragment
+                            //      3. Deal with trash word
+                            //if there is at least one word -> go into the next fragment
+                            pbProgressBarMmf.setVisibility(View.GONE);
+                            if (!activity.translationPairList.isEmpty()) {
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new TranslationFragment()).commit();
+                            } else {
+                                activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                            }
+                        }
+                    });
                 }
 
 
