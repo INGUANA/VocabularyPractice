@@ -141,40 +141,45 @@ public class MainMenuFragment extends Fragment {
 
     //do asynchronous call on firebase. when returned do synchronous 5 calls for getting word transations from the retrieved firebase words
     private void downloadFirebaseFile() {
-        final StorageReference vocabularyFirebaseRef = mStorageRef.child(VOCABULARY_WORDS_PATH);
-        final File checkFileInstance = new File("vocabulary.txt");
-        File localFile = null;
-        try {
-            if (checkFileInstance.exists()) {
-                checkFileInstance.delete();
+        if(activity.isNetworkAvailable()) {
+            final StorageReference vocabularyFirebaseRef = mStorageRef.child(VOCABULARY_WORDS_PATH);
+            final File checkFileInstance = new File("vocabulary.txt");
+            File localFile = null;
+            try {
+                if (checkFileInstance.exists()) {
+                    checkFileInstance.delete();
+                }
+                localFile = File.createTempFile("vocabulary", "txt", getContext().getFilesDir());
+                //NOTE: delete file when finished or when error. (myContext.deleteFile(fileName)
+                //https://developer.android.com/training/data-storage/files/internal#DeleteFile
+            } catch (IOException e) {
+                e.printStackTrace();
+                activity.displayDialog("Error", "Something went wrong with files.", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             }
-            localFile = File.createTempFile("vocabulary", "txt", getContext().getFilesDir());
-            //NOTE: delete file when finished or when error. (myContext.deleteFile(fileName)
-            //https://developer.android.com/training/data-storage/files/internal#DeleteFile
-        } catch (IOException e) {
-            e.printStackTrace();
-            activity.displayDialog("Error", "Something went wrong with files.", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+            final String instanceLocalFile = localFile.getPath();
+            firebaseTask = vocabularyFirebaseRef.getFile(localFile);//asynchronous
+
+            firebaseTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    // Successfully downloaded data to local file
+                    activity.vocabulary = new Vocabulary(instanceLocalFile);
+                    activity.sessionVocabulary = new Vocabulary(instanceLocalFile);
+                    getTranslationRequest();
+
+                }
+            });
+            firebaseTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle failed download
+                    vocabularyFirebaseRef.delete();
+                    pbProgressBarMmf.setVisibility(View.GONE);
+                }
+            });
+        } else {
+            activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         }
-        final String instanceLocalFile = localFile.getPath();
-        firebaseTask = vocabularyFirebaseRef.getFile(localFile);//asynchronous
-
-        firebaseTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                // Successfully downloaded data to local file
-                activity.vocabulary = new Vocabulary(instanceLocalFile);
-                getTranslationRequest();
-
-            }
-        });
-        firebaseTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle failed download
-                vocabularyFirebaseRef.delete();
-                pbProgressBarMmf.setVisibility(View.GONE);
-            }
-        });
     }
 
     public void getTranslationRequest() { //do 5 calls and get the results into the array
@@ -183,20 +188,21 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void run() {
                 try {
-
-                    final APIInterface APIInterface = JsonGetter.buildService(APIInterface.class);
+                    JsonGetter.getRetrofitInstance(); //needs fixing
+                    final APIInterface apiInterface = JsonGetter.buildService(APIInterface.class);
 
                     for (int i = 0; 5 > i; i++) {
-                        String iterationWord = activity.vocabulary.getRandomVocabularyWord();
-                        Call<BaseResponse> call = APIInterface.getWordTranslation("trnsl.1.1.20191122T214733Z.cf94b5c1ffe7138e.4e0d2c816ca7086b3fb094fae7693af405c30627", iterationWord, "ja");
+                        String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
+                        Call<BaseResponse> call = apiInterface.getWordTranslation("trnsl.1.1.20191122T214733Z.cf94b5c1ffe7138e.4e0d2c816ca7086b3fb094fae7693af405c30627", iterationWord, "ja");
                         //Call<Object> call = APIInterface.getLangs("dict.1.1.20191113T191908Z.b09388c3c67363c8.a16b9135d70ffed223b2a9e83d3ae4d1cc3b95f7"); dictionary call
                         try {
                             Response<BaseResponse> response = call.execute(
                             );
                             if (MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()) {
+                                activity.sourcePairList.add(iterationWord);
                                 activity.translationPairList.add(response.body().getText().get(0));
+                                activity.sessionVocabulary.removeWord(iterationWord);
                             }
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -207,13 +213,11 @@ public class MainMenuFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //TODO: SEMI-DONE1. Add circularProgressBar
-                            //      DONE2. Add next fragment
-                            //      3. Deal with trash word
+                            //TODO:   3. Deal with trash word
                             //if there is at least one word -> go into the next fragment
                             pbProgressBarMmf.setVisibility(View.GONE);
                             if (!activity.translationPairList.isEmpty()) {
-                                getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new TranslationFragment()).commit();
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment()).commit();
                             } else {
                                 activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                             }
@@ -224,9 +228,6 @@ public class MainMenuFragment extends Fragment {
 
             }
         }).start();
-        JsonGetter.getRetrofitInstance(); //needs fixing
-
-
     }
     //////////////
 

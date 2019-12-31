@@ -3,6 +3,9 @@ package com.inguana.vocabularypractice;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -12,12 +15,12 @@ import java.util.List;
 import libs.mjn.prettydialog.PrettyDialog;
 
 
-class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     //private FrameLayout flMainFragmentContainerMa;
     public String currentMainFragment;
-    public Vocabulary vocabulary;
-    public List<String> translationPairList;
+    public Vocabulary vocabulary, sessionVocabulary;
+    public List<String> translationPairList, sourcePairList;
     private PrettyDialog dialogPopUp;
     public enum APICode {
         SUCCESS(200);
@@ -36,6 +39,7 @@ class MainActivity extends AppCompatActivity {
     public void initialize() {
         //flMainFragmentContainerMa = findViewById(R.id.flMainFragmentContainerMa);
         translationPairList = new ArrayList<>();
+        sourcePairList = new ArrayList<>();
     }
 
     @Override
@@ -68,5 +72,12 @@ class MainActivity extends AppCompatActivity {
             dialogPopUp.show();
             //dialogPopUp.setOnCancelListener();
         //}
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

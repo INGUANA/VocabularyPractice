@@ -4,11 +4,79 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/pbProgressBarFwg"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:elevation="5dp"
+        android:visibility="gone"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
+        android:id="@+id/tvSourceWordFwg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="adsfadfasdfasdfasdf"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/vLineSeparatorFwg"/>
+
+    <View
+        android:id="@+id/vLineSeparatorFwg"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/pdlg_color_black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <Button
+        android:id="@+id/btMoveNextWordFwg"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/fragment_word_guess_move_next_word"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/vLineSeparatorFwg"
+        app:layout_constraintEnd_toEndOf="@id/vLineSeparatorFwg"/>
+
+    <TextView
+        android:id="@+id/tvDestinationWordFwg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="adsfadfasdfasdfasdf"
+        app:layout_constraintTop_toBottomOf="@id/vLineSeparatorFwg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/ivCurtainOfWordFwg"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:elevation="2dp"
+        app:layout_constraintTop_toBottomOf="@id/vLineSeparatorFwg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/btDisplayWordFwg"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/fragment_word_guess_see_translation"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toTopOf="@id/vLineSeparatorFwg"
+        app:layout_constraintBottom_toBottomOf="@id/vLineSeparatorFwg"
+        app:layout_constraintStart_toStartOf="@id/vLineSeparatorFwg"
+        app:layout_constraintEnd_toEndOf="@id/vLineSeparatorFwg"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

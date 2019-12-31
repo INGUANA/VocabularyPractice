@@ -8,6 +8,8 @@
     <string name="fragment_main_menu_english_to_japanese">Eng to Jap</string>
     <string name="fragment_main_menu_start">Start</string>
     <string name="fragment_main_menu_tooltip_text_settings">Select which language the known word is from, and to what language you will be trying to translate it.</string>
+    <string name="fragment_word_guess_see_translation">See Translation</string>
+    <string name="fragment_word_guess_move_next_word">Next Word</string>
 
 
 
