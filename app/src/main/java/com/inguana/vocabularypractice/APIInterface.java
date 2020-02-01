@@ -16,9 +16,12 @@ public interface APIInterface {
     /*@GET("changes/")
     Call<List<Change>> loadChanges(@Query("q") String status);*/
 
-    @GET("translate")
-    Call<BaseResponse> getWordTranslation(@Query("key") String key, @Query("text") String wordToTranslate, @Query("lang") String languageToTranslateTo);
+    /*@GET("translate")
+    Call<BaseResponse> getWordTranslation(@Query("key") String key, @Query("text") String wordToTranslate, @Query("lang") String languageToTranslateTo);*/
 
     @GET("getLangs")
     Call<Object> getLangs(@Query("key") String key);
+
+    @GET("words")
+    Call<BaseResponse> getWordTranslation(@Query("keyword") String key);
 }

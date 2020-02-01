@@ -4,44 +4,70 @@ import java.util.List;
 
 public class BaseResponse {
 
-    /*private Body body;
+    private List<Data> data;
 
-    public Body getBody() {
-        return body;
+    public List<Data> getData() {
+        return data;
     }
 
-    public void setBody(Body body) {
-        this.body = body;
-    }*/
+    public void setData(List<Data> data) {
+        this.data = data;
+    }
+
+    public class Data {
+        private String slug;
+        private List<Japanese> japanese;
+        private List<Senses> senses;
 
 
-    //public class Body {
-        private int code;
-        private String lang;
-        private List<String> text;
+        public class Senses {
 
-        public int getCode() {
-            return code;
+            private List<String> english_definitions;
+            private List<String> parts_of_speech;
+        }
+        public class Japanese {
+            private String word;
+            private String reading;
+
+            public String getWord() {
+                return word;
+            }
+
+            public String getReading() {
+                return reading;
+            }
+
+            public void setWord(String word) {
+                this.word = word;
+            }
+
+            public void setReading(String reading) {
+                this.reading = reading;
+            }
+
+        }
+        public String getSlug() {
+            return slug;
         }
 
-        public void setCode(int code) {
-            this.code = code;
+        public List<Japanese> getJapanese() {
+            return japanese;
         }
 
-        public String getLang() {
-            return lang;
+        public List<Senses> getSenses() {
+            return senses;
         }
 
-        public void setLang(String lang) {
-            this.lang = lang;
+        public void setSlug(String slug) {
+            this.slug = slug;
         }
 
-        public List<String> getText() {
-            return text;
+        public void setJapanese(List<Japanese> japanese) {
+            this.japanese = japanese;
         }
 
-        public void setText(List<String> text) {
-            this.text = text;
+        public void setSenses(List<Senses> senses) {
+            this.senses = senses;
         }
-    //}
+    }
 }

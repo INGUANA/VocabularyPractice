@@ -12,7 +12,8 @@ public class JsonGetter {
 
     private static Retrofit retrofit;
     //private static final String BASE_URL = "https://dictionary.yandex.net/api/v1/dicservice.json/";
-    private static final String BASE_URL = "https://translate.yandex.net/api/v1.5/tr.json/";
+    private static final String BASE_URL = "https://jisho.org/api/v1/search/";//https://jisho.org/api/v1/search/words?keyword=house
+    //Response{protocol=http/1.1, code=200, message=OK, url=https://jisho.org/api/v1/search/words?keyword=surprise}
 
     //create logger
     private static HttpLoggingInterceptor logger = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);

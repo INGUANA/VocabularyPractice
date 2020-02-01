@@ -86,24 +86,24 @@ public class WordGuessFragment extends Fragment {
             final APIInterface apiInterface = JsonGetter.buildService(APIInterface.class);
 
             final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
-            Call<BaseResponse> call = apiInterface.getWordTranslation("trnsl.1.1.20191122T214733Z.cf94b5c1ffe7138e.4e0d2c816ca7086b3fb094fae7693af405c30627", iterationWord, "ja");
+            Call<BaseResponse> call = apiInterface.getWordTranslation(iterationWord);
 
             try {
                 call.enqueue(new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                         pbProgressBarFwg.setVisibility(View.GONE);
-                        if (MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()) {
+                        if (response.isSuccessful()/*MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()*/) {
                             activity.sourcePairList.remove(0);
                             activity.translationPairList.remove(0);
 
                             activity.sourcePairList.add(iterationWord);
-                            activity.translationPairList.add(response.body().getText().get(0));
+                            activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
                             activity.sessionVocabulary.removeWord(iterationWord);
 
                             getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment()).commit();
                         } else {
-                            onClickMoveToNextWord();
+                            //onClickMoveToNextWord();
                         }
 
                     }

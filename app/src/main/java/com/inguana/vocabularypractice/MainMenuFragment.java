@@ -178,6 +178,7 @@ public class MainMenuFragment extends Fragment {
                 }
             });
         } else {
+            pbProgressBarMmf.setVisibility(View.GONE);
             activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         }
     }
@@ -193,14 +194,14 @@ public class MainMenuFragment extends Fragment {
 
                     for (int i = 0; 5 > i; i++) {
                         String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
-                        Call<BaseResponse> call = apiInterface.getWordTranslation("trnsl.1.1.20191122T214733Z.cf94b5c1ffe7138e.4e0d2c816ca7086b3fb094fae7693af405c30627", iterationWord, "ja");
+                        Call<BaseResponse> call = apiInterface.getWordTranslation(iterationWord);
                         //Call<Object> call = APIInterface.getLangs("dict.1.1.20191113T191908Z.b09388c3c67363c8.a16b9135d70ffed223b2a9e83d3ae4d1cc3b95f7"); dictionary call
                         try {
                             Response<BaseResponse> response = call.execute(
                             );
-                            if (MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()) {
+                            if (response.isSuccessful()/*MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()*/) {
                                 activity.sourcePairList.add(iterationWord);
-                                activity.translationPairList.add(response.body().getText().get(0));
+                                activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
                                 activity.sessionVocabulary.removeWord(iterationWord);
                             }
                         } catch (IOException e) {
