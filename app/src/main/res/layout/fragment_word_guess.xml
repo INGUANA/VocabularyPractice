@@ -20,6 +20,7 @@
 
     <TextView
         android:id="@+id/tvSourceWordFwg"
+        style="@style/ButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="adsfadfasdfasdfasdf"
@@ -31,7 +32,7 @@
     <View
         android:id="@+id/vLineSeparatorFwg"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:background="@color/pdlg_color_black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,6 +50,7 @@
 
     <TextView
         android:id="@+id/tvDestinationWordFwg"
+        style="@style/ButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="adsfadfasdfasdfasdf"
@@ -71,7 +73,7 @@
     <Button
         android:id="@+id/btDisplayWordFwg"
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:text="@string/fragment_word_guess_see_translation"
         android:textAllCaps="false"
         app:layout_constraintTop_toTopOf="@id/vLineSeparatorFwg"

@@ -12,4 +12,8 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="ButtonTextStyle">
+        <item name="android:textSize">21dp</item>
+    </style>
+
 </resources>
