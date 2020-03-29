@@ -35,28 +35,39 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="@dimen/margin_top_button"
         android:text="@string/fragment_main_menu_english_to_japanese"
-        app:layout_constraintBottom_toTopOf="@+id/btExitMmf"
+        app:layout_constraintBottom_toTopOf="@+id/btCreateModuleMmf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btStartMmf" />
 
     <Button
-        android:id="@+id/btExitMmf"
+        android:id="@+id/btCreateModuleMmf"
         android:layout_width="@dimen/button_width"
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="@dimen/margin_top_button"
-        android:text="@string/fragment_main_menu_exit"
+        android:text="@string/fragment_main_menu_create_module"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btSettingsMmf" />
 
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="@dimen/margin_end"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        app:iiv_color="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <!-- TODO: image info icon-->
     <ImageButton
         android:id="@+id/ibSettingsInformationMmf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="@dimen/margin_start"
+        android:background="@drawable/pdlg_icon_info"
+        android:backgroundTint="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="@id/btSettingsMmf"
         app:layout_constraintBottom_toBottomOf="@id/btSettingsMmf"
         app:layout_constraintStart_toEndOf="@id/btSettingsMmf"/>
@@ -65,7 +76,7 @@
         android:id="@+id/tvTooltipTextMmf"
         android:layout_width="@dimen/popup_width"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:text="@string/fragment_main_menu_tooltip_text_settings"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/ibSettingsInformationMmf"

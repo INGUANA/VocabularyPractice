@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/tvSourceWordFwg"
-        style="@style/ButtonTextStyle"
+        style="@style/MenuButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="adsfadfasdfasdfasdf"
@@ -50,7 +50,7 @@
 
     <TextView
         android:id="@+id/tvDestinationWordFwg"
-        style="@style/ButtonTextStyle"
+        style="@style/MenuButtonTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="adsfadfasdfasdfasdf"

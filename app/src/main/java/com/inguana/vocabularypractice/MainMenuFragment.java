@@ -37,7 +37,7 @@ public class MainMenuFragment extends Fragment {
 
     private int fragmentContainerId;
 
-    private Button btStartMmf, btSettingsMmf, btExitMmf;
+    private Button btStartMmf, btSettingsMmf, btCreateModuleMmf;
     private ImageButton ibSettingsInformationMmf;
     private TranslationMode translationMode;
     private TextView tvTooltipTextMmf;
@@ -49,11 +49,12 @@ public class MainMenuFragment extends Fragment {
 
     private static final String VOCABULARY_WORDS_PATH = "google-10000-english.txt";
     //private static final String VOCABULARY_WORDS_URI = "gs://vocabularypractice-dae13.appspot.com/google-10000-english.txt";
+    //TODO: make overlayDialog for loading (so that buttons cant be clicked when loading.
 
-    public void initialize(View view, ViewGroup container) {
+    private void initialize(View view, ViewGroup container) {
         btStartMmf = view.findViewById(R.id.btStartMmf);
         btSettingsMmf = view.findViewById(R.id.btSettingsMmf);
-        btExitMmf = view.findViewById(R.id.btExitMmf);
+        btCreateModuleMmf = view.findViewById(R.id.btCreateModuleMmf);
 
         tvTooltipTextMmf = view.findViewById(R.id.tvTooltipTextMmf);
 
@@ -100,10 +101,10 @@ public class MainMenuFragment extends Fragment {
             }
         });
 
-        btExitMmf.setOnClickListener(new View.OnClickListener() {
+        btCreateModuleMmf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().finish();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new CreateModuleFragment()).commit();
             }
         });
 
@@ -154,7 +155,7 @@ public class MainMenuFragment extends Fragment {
                 //https://developer.android.com/training/data-storage/files/internal#DeleteFile
             } catch (IOException e) {
                 e.printStackTrace();
-                activity.displayDialog("Error", "Something went wrong with files.", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                activity.displayDialog("Error", getResources().getString(R.string.popup_io_firebase_file_error), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             }
             final String instanceLocalFile = localFile.getPath();
             firebaseTask = vocabularyFirebaseRef.getFile(localFile);//asynchronous
@@ -183,7 +184,7 @@ public class MainMenuFragment extends Fragment {
         }
     }
 
-    public void getTranslationRequest() { //do 5 calls and get the results into the array
+    private void getTranslationRequest() { //do 5 calls and get the results into the array
 
         new Thread(new Runnable() {
             @Override

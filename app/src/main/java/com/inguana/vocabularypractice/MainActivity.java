@@ -1,13 +1,21 @@
 package com.inguana.vocabularypractice;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
+
+import com.google.android.material.snackbar.Snackbar;
+import com.inguana.vocabularypractice.Room.AppDatabase;
+import com.mikepenz.iconics.context.IconicsContextWrapper;
+import com.wajahatkarim3.roomexplorer.RoomExplorer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     public Vocabulary vocabulary, sessionVocabulary;
     public List<String> translationPairList, sourcePairList;
     private PrettyDialog dialogPopUp;
+    private CoordinatorLayout colMainActivityMa;
+    public AppDatabase DBInstance;
+
     public enum APICode {
         SUCCESS(200);
 
@@ -38,8 +49,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void initialize() {
         //flMainFragmentContainerMa = findViewById(R.id.flMainFragmentContainerMa);
+        colMainActivityMa = findViewById(R.id.colMainActivityMa);
+
         translationPairList = new ArrayList<>();
         sourcePairList = new ArrayList<>();
+        DBInstance = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "Word-Database").build();
+
     }
 
     @Override
@@ -74,10 +90,31 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(KeyEvent.KEYCODE_VOLUME_DOWN == keyCode) {
+            RoomExplorer.show(this, AppDatabase.class, "Word-Database");
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void displaySnackBar(String message, int messageDuration) {
+        Snackbar snackbar = Snackbar
+                .make(colMainActivityMa, message, messageDuration);
+        snackbar.show();
+    }
+
+    //TODO: Handle OnBackPressed to pop fragments correctly
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
     }
 }
