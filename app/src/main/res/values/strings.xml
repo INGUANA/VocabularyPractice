@@ -2,7 +2,7 @@
     <string name="app_name">Vocabulary Practice</string>
 
     <!--Main Menu Fragment-->
-    <string name="fragment_main_menu_create_module">Create Module</string>
+    <string name="fragment_main_menu_create_module">Modules</string>
     <string name="fragment_main_menu_settings">Settings</string>
     <string name="fragment_main_menu_japanese_to_english">Jap to Eng</string>
     <string name="fragment_main_menu_english_to_japanese">Eng to Jap</string>
@@ -16,11 +16,12 @@
     <string name="fragment_create_module_create_new_module">Create\nModule</string>
     <string name="fragment_create_module_update_module">Update\nModule</string>
 
-    <string name="fragment_module_options_create_module">Create\nModule</string>
-    <string name="fragment_module_options_update_module">Update\nModule</string>
-    <string name="fragment_module_options_start_module">Start\nModule</string>
+    <string name="fragment_module_list_edit_module">Edit\nModule</string>
+    <string name="fragment_module_list_delete_module">Delete\nModule</string>
+    <string name="fragment_module_list_info">Long press for more options</string>
 
 
+    <string name="fragment_module_list_module">New\nModule</string>
 
     <string name="popup_empty_title">Type the new module\'s name to create it.</string>
     <string name="popup_no_internet">No internet available.</string>

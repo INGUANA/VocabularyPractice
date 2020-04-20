@@ -14,11 +14,11 @@ public class Vocabulary {
     private List<String> vocabularyWords;
 
     public Vocabulary() {
-        vocabularyWords = new ArrayList<String>();
+        vocabularyWords = new ArrayList<>();
     }
 
     public Vocabulary(String instanceLocalFilePath) {
-        vocabularyWords = new ArrayList<String>();
+        vocabularyWords = new ArrayList<>();
         File vocabularyFile = new File(instanceLocalFilePath);
         try {
             if (vocabularyFile.exists()) {

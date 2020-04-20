@@ -35,13 +35,13 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="@dimen/margin_top_button"
         android:text="@string/fragment_main_menu_english_to_japanese"
-        app:layout_constraintBottom_toTopOf="@+id/btCreateModuleMmf"
+        app:layout_constraintBottom_toTopOf="@+id/btModuleListMmf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btStartMmf" />
 
     <Button
-        android:id="@+id/btCreateModuleMmf"
+        android:id="@+id/btModuleListMmf"
         android:layout_width="@dimen/button_width"
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="@dimen/margin_top_button"

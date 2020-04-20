@@ -54,21 +54,13 @@ public class WordGuessFragment extends Fragment {
         initialize(view, container);
         initializeTextViews();
 
-        btDisplayWordFwg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ivCurtainOfWordFwg.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_down));
-                ivCurtainOfWordFwg.setVisibility(View.GONE);
+        btDisplayWordFwg.setOnClickListener(view1 -> {
+            ivCurtainOfWordFwg.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_down));
+            ivCurtainOfWordFwg.setVisibility(View.GONE);
 
-            }
         });
 
-        btMoveNextWordFwg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickMoveToNextWord();
-            }
-        });
+        btMoveNextWordFwg.setOnClickListener(view12 -> onClickMoveToNextWord());
 
 
         return view;

@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CustomRecyclerViewArrayAdapter extends RecyclerView.Adapter<CustomRecyclerViewArrayAdapter.CustomViewHolder> {
+public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyclerViewArrayAdapter.CustomViewHolder> {
 
     private List<String> wordList;
     private boolean isFirstHolder;
@@ -46,7 +46,7 @@ public class CustomRecyclerViewArrayAdapter extends RecyclerView.Adapter<CustomR
         EditText editText;
         IconicsImageView iconicsImageView;
         int position;
-        CustomRecyclerViewArrayAdapter currentRVAdapter;
+        WordRecyclerViewArrayAdapter currentRVAdapter;
 
         // Provide a suitable constructor (depends on the kind of dataset)
         CustomViewHolder(View view, List<String> wordList) {
@@ -62,7 +62,7 @@ public class CustomRecyclerViewArrayAdapter extends RecyclerView.Adapter<CustomR
             });
         }
 
-        CustomViewHolder(View view, List<String> wordList, Context context, CustomRecyclerViewArrayAdapter currentRVAdapter) {
+        CustomViewHolder(View view, List<String> wordList, Context context, WordRecyclerViewArrayAdapter currentRVAdapter) {
             super(view);
             iconicsImageView = view.findViewById(R.id.iivAddIconRvai);
 
@@ -72,9 +72,7 @@ public class CustomRecyclerViewArrayAdapter extends RecyclerView.Adapter<CustomR
             IconicsDrawable addNewWordIcon = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_add_circle);
             addNewWordIcon.color(ContextCompat.getColor(context, R.color.pdlg_color_blue));
             iconicsImageView.setIcon(addNewWordIcon);
-            iconicsImageView.setOnClickListener((View iivView) -> {
-                addWordItem("");
-            });
+            iconicsImageView.setOnClickListener((View iivView) -> addWordItem(""));
         }
 
         private void addWordItem(String word) {
@@ -88,7 +86,7 @@ public class CustomRecyclerViewArrayAdapter extends RecyclerView.Adapter<CustomR
         }
     }
 
-    public CustomRecyclerViewArrayAdapter(List<String> wordList, Context context) {
+    public WordRecyclerViewArrayAdapter(List<String> wordList, Context context) {
         this.wordList = wordList;
         isFirstHolder = true;
         this.context = context;
@@ -106,7 +104,7 @@ public class CustomRecyclerViewArrayAdapter extends RecyclerView.Adapter<CustomR
 
     @NonNull
     @Override// Create new views (invoked by the layout manager)
-    public CustomRecyclerViewArrayAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public WordRecyclerViewArrayAdapter.CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         //create a new view
         View view;
@@ -116,7 +114,7 @@ public class CustomRecyclerViewArrayAdapter extends RecyclerView.Adapter<CustomR
             viewHolder = new CustomViewHolder(view, wordList, context, this);
             isFirstHolder = false;
         } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_item, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_edittextview_item, parent, false);
             viewHolder = new CustomViewHolder(view, wordList);
         }
 

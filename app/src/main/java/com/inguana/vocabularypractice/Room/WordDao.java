@@ -17,6 +17,9 @@ public interface WordDao {
     @Query("SELECT * FROM Word WHERE module_name = :module_name")
     List<Word> getModule(String module_name);
 
+    @Query("SELECT DISTINCT module_name FROM Word")
+    List<String> getAllModules();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllModule(List<Word> newModule);//... means zero or more Word objects are eligible to pass as parameters
 

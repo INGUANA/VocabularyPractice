@@ -12,7 +12,7 @@
     <dimen name="button_height_small">47dp</dimen>
     <dimen name="button_height">50dp</dimen>
 
-    <!--Margin top-->
+    <!--Margin Top-->
     <dimen name="margin_top_layout">10dp</dimen>
 
     <dimen name="margin_top_button">20dp</dimen>

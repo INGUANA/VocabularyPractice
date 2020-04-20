@@ -19,20 +19,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.StorageReference;
-import com.inguana.vocabularypractice.CustomExtensions.CustomRecyclerViewArrayAdapter;
+import com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter;
 import com.inguana.vocabularypractice.Room.Word;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.Iconics;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.inguana.vocabularypractice.CustomExtensions.CustomRecyclerViewArrayAdapter.ADD_BUTTON_NAME_INDICATOR;
+import static com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter.ADD_BUTTON_NAME_INDICATOR;
 
 public class CreateModuleFragment extends Fragment {
 
@@ -53,7 +51,7 @@ public class CreateModuleFragment extends Fragment {
     private RecyclerView rvWordListCmf;
     private ViewGroup clCreateUpdateMockLayoutCmf;
     private LinearLayoutManager layoutManager;
-    private CustomRecyclerViewArrayAdapter recyclerViewArrayAdapter;
+    private WordRecyclerViewArrayAdapter recyclerViewArrayAdapter;
     private IconicsImageView iivCreateUpdateNewModuleIconCmf;
     private List<String> currentModule;
 
@@ -92,7 +90,7 @@ public class CreateModuleFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         rvWordListCmf.setLayoutManager(layoutManager);
 
-        recyclerViewArrayAdapter = new CustomRecyclerViewArrayAdapter(new ArrayList<>(Arrays.asList(ADD_BUTTON_NAME_INDICATOR)), getContext());//new ArrayList<>(Arrays.asList("")). Collections.singletonList("")) produces immutable list so i cant add additional element if i wanted to
+        recyclerViewArrayAdapter = new WordRecyclerViewArrayAdapter(new ArrayList<>(Arrays.asList(ADD_BUTTON_NAME_INDICATOR)), getContext());//new ArrayList<>(Arrays.asList("")). Collections.singletonList("")) produces immutable list so i cant add additional element if i wanted to
         rvWordListCmf.setAdapter(recyclerViewArrayAdapter);
 
         IconicsDrawable addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_create_new_folder);
@@ -111,29 +109,24 @@ public class CreateModuleFragment extends Fragment {
                 //TODO: add last word in wordlist without onFocus
                 //TODO: don't add empty words
                 //TODO: check if module exists, if exists 1. how it behaves(should replace) 2. make it so that it gives a warning.
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            List<Word> wordList = recyclerViewArrayAdapter.getWordList().stream()
-                                    .map(item -> new Word(item, itvModuleTitleCmf.getText().toString()))
-                                    .collect(Collectors.toList());
-                            activity.DBInstance.wordDao().insertAllModule(wordList);//check how to pass in room the values. check how to delete
-                            //activity.DBInstance.wordDao().delete(Collections.singletonList(new Word(ADD_BUTTON_NAME_INDICATOR, itvModuleTitleCmf.getText().toString())));
+                //TODO: return to module list
+                new Thread(() -> {
+                    try {
+                        List<Word> wordList = recyclerViewArrayAdapter.getWordList().stream()
+                                .map(item -> new Word(item, itvModuleTitleCmf.getText().toString()))
+                                .collect(Collectors.toList());
+                        activity.DBInstance.wordDao().insertAllModule(wordList);//check how to pass in room the values. check how to delete
+                        //activity.DBInstance.wordDao().delete(Collections.singletonList(new Word(ADD_BUTTON_NAME_INDICATOR, itvModuleTitleCmf.getText().toString())));
 
-                            activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new ModuleOptionsFragment()).commit();
+                        activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
+                        //getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new ModuleOptionsFragment()).commit();
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        getActivity().runOnUiThread(() -> {
 
-                                }
-                            });
-                        }
+                        });
                     }
                 }).start();
             }
