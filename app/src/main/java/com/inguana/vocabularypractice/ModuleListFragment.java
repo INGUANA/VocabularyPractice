@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter.ADD_BUTTON_NAME_INDICATOR;
+import static com.inguana.vocabularypractice.MainActivity.CREATE_MODULE_FRAGMENT_TAG;
 
 public class ModuleListFragment extends Fragment {
 
@@ -77,7 +78,10 @@ public class ModuleListFragment extends Fragment {
         addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         iivNewModuleIconMlf.setIcon(addNewWordIcon);
 
-        clNewModuleMlf.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new CreateModuleFragment()).commit());
+        clNewModuleMlf.setOnClickListener(view1 -> {
+            activity.currentMainFragment = CREATE_MODULE_FRAGMENT_TAG;
+            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new CreateModuleFragment(), CREATE_MODULE_FRAGMENT_TAG).addToBackStack(null).commit();
+        });
 
         setModuleList();
 

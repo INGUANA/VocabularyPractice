@@ -19,13 +19,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.inguana.vocabularypractice.Room.Word;
 import com.inguana.vocabularypractice.rest.response.BaseResponse;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
+
+import static com.inguana.vocabularypractice.MainActivity.MODULE_LIST_FRAGMENT_TAG;
+import static com.inguana.vocabularypractice.MainActivity.WORD_GUESS_FRAGMENT_TAG;
 
 public class MainMenuFragment extends Fragment {
 
@@ -89,7 +94,10 @@ public class MainMenuFragment extends Fragment {
 
         btSettingsMmf.setOnClickListener(view12 -> onClickSwapTranslationMode());
 
-        btModuleListMmf.setOnClickListener(view13 -> getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new ModuleListFragment()).commit());
+        btModuleListMmf.setOnClickListener(view13 -> {
+            activity.currentMainFragment = MODULE_LIST_FRAGMENT_TAG;
+            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new ModuleListFragment(), MODULE_LIST_FRAGMENT_TAG).addToBackStack(null).commit();
+        });
 
         ibSettingsInformationMmf.setOnClickListener(v -> onClickViewToolTip());
 
@@ -182,7 +190,8 @@ public class MainMenuFragment extends Fragment {
                     //if there is at least one word -> go into the next fragment
                     pbProgressBarMmf.setVisibility(View.GONE);
                     if (!activity.translationPairList.isEmpty()) {
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment()).commit();
+                        activity.currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment(), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
                     } else {
                         activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                     }

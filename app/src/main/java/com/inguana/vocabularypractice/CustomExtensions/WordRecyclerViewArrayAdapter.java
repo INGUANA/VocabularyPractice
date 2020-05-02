@@ -34,7 +34,8 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
     //Get the current module list with Word items and without the add button.
     public List<Word> getCleanWordList(String moduleName) {//TODO: check with empty list
         return wordList.stream()
-                .skip(wordList.size() - 1)
+                .limit(wordList.size() - 1)
+                .filter(item -> !item.isEmpty())
                 .map(item -> new Word(item, moduleName))
                 .collect(Collectors.toList());
     }
@@ -54,10 +55,8 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
             editText = view.findViewById(R.id.etEditWordRvi);
 
             editText.setOnFocusChangeListener((activeView, hasFocus) -> {
-                if(!hasFocus) {
-                    if(!"".equals(editText.getText().toString())) {
-                        wordList.set(getAdapterPosition(), editText.getText().toString());
-                    }
+                if (!hasFocus) {
+                    wordList.set(getAdapterPosition(), editText.getText().toString());
                 }
             });
         }
@@ -77,12 +76,9 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
 
         private void addWordItem(String word) {
             currentRVAdapter.getWordList().add(word);
-            int adaptPos = getAdapterPosition();
 
-            Collections.swap(currentRVAdapter.getWordList(), getAdapterPosition(),currentRVAdapter.getWordList().size() - 1);
-            //currentRVAdapter.notifyItemInserted(currentRVAdapter.getWordList().size() - 1);
+            Collections.swap(currentRVAdapter.getWordList(), getAdapterPosition(), currentRVAdapter.getWordList().size() - 1);
             currentRVAdapter.notifyItemMoved(currentRVAdapter.getWordList().size() - 2, currentRVAdapter.getWordList().size() - 1);
-            //currentRVAdapter.notifyItemRangeChanged(0, currentRVAdapter.getWordList().size() - 1, null);
         }
     }
 
@@ -109,7 +105,7 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
         //create a new view
         View view;
         CustomViewHolder viewHolder;
-        if(0 == viewType/*isFirstHolder*/) {
+        if (0 == viewType/*isFirstHolder*/) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_add_item, parent, false);
             viewHolder = new CustomViewHolder(view, wordList, context, this);
             isFirstHolder = false;
@@ -123,7 +119,7 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
 
     @Override// Replace the contents of a view (invoked by the layout manager)
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-        if(wordList.size() - 1 != position) {
+        if (wordList.size() - 1 != position) {
             holder.editText.setTag(position);
             holder.editText.setText(wordList.get(position));
             holder.position = position;

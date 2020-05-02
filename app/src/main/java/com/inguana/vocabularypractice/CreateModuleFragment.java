@@ -28,7 +28,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter.ADD_BUTTON_NAME_INDICATOR;
 
@@ -40,12 +40,8 @@ public class CreateModuleFragment extends Fragment {
 
     private int fragmentContainerId;
 
-    private Button btStartMmf, btSettingsMmf, btCreateModuleMmf;
-    private ImageButton ibSettingsInformationMmf;
-    private TranslationMode translationMode;
     private TextView itvModuleTitleCmf;
     private Dialog overlayDialog;
-    private StorageReference mStorageRef;
     private MainActivity activity;
     private CircularProgressView pbProgressBarMmf;
     private RecyclerView rvWordListCmf;
@@ -53,11 +49,9 @@ public class CreateModuleFragment extends Fragment {
     private LinearLayoutManager layoutManager;
     private WordRecyclerViewArrayAdapter recyclerViewArrayAdapter;
     private IconicsImageView iivCreateUpdateNewModuleIconCmf;
-    private List<String> currentModule;
+    private List<Word> wordList;
 
     public void initialize(View view, ViewGroup container) {
-        btStartMmf = view.findViewById(R.id.btStartMmf);
-
         fragmentContainerId = container.getId();
 
         overlayDialog = new Dialog(getContext(), R.style.Theme_AppCompat_Dialog_Transparent);
@@ -71,6 +65,7 @@ public class CreateModuleFragment extends Fragment {
         clCreateUpdateMockLayoutCmf = view.findViewById(R.id.clCreateUpdateMockLayoutCmf);
 
         activity = ((MainActivity) getActivity());
+        wordList = new ArrayList<>();
     }
 
     @Override
@@ -97,75 +92,49 @@ public class CreateModuleFragment extends Fragment {
         addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         iivCreateUpdateNewModuleIconCmf.setIcon(addNewWordIcon);
         //using lambda instead of old ways: https://stackoverflow.com/questions/30752547/what-does-it-mean-that-a-listener-can-be-replaced-with-lambda
-        /*iivCreateUpdateNewModuleIconCmf.setOnClickListener((View iivView) -> {
-            addWordItem("");
-        });*/
 
         clCreateUpdateMockLayoutCmf.setOnClickListener((View iivView) -> {
             if(itvModuleTitleCmf.getText().toString().isEmpty()) {
                 //TODO: play animation on button
                 activity.displayDialog("Error", getResources().getString(R.string.popup_empty_title), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             } else {
-                //TODO: add last word in wordlist without onFocus
-                //TODO: don't add empty words
-                //TODO: check if module exists, if exists 1. how it behaves(should replace) 2. make it so that it gives a warning.
-                //TODO: return to module list
+                //DONE: add last word in wordlist without onFocus
+                //DONE: don't add empty words
+                //DONE: check if module exists, if exists 1. how it behaves(should replace) 2. make it so that it gives a warning.
+                //DONE: return to module list
+                AtomicBoolean moduleExists = new AtomicBoolean(false);
+                rvWordListCmf.clearFocus();
                 new Thread(() -> {
                     try {
-                        List<Word> wordList = recyclerViewArrayAdapter.getWordList().stream()
-                                .map(item -> new Word(item, itvModuleTitleCmf.getText().toString()))
-                                .collect(Collectors.toList());
-                        activity.DBInstance.wordDao().insertAllModule(wordList);//check how to pass in room the values. check how to delete
-                        //activity.DBInstance.wordDao().delete(Collections.singletonList(new Word(ADD_BUTTON_NAME_INDICATOR, itvModuleTitleCmf.getText().toString())));
+                        if(activity.DBInstance.wordDao().checkIfDuplicate(itvModuleTitleCmf.getText().toString())) {
+                            moduleExists.set(true);
+                        } else {
+                            wordList = recyclerViewArrayAdapter.getCleanWordList(itvModuleTitleCmf.getText().toString());
+                            if(!wordList.isEmpty()) {
+                                activity.DBInstance.wordDao().insertAllModule(wordList);
+                                //activity.DBInstance.wordDao().delete(Collections.singletonList(new Word(ADD_BUTTON_NAME_INDICATOR, itvModuleTitleCmf.getText().toString())));
 
-                        activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
-                        //getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new ModuleOptionsFragment()).commit();
+                                activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
+                            }
+                        }
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
                         getActivity().runOnUiThread(() -> {
-
+                            if(moduleExists.get()) {
+                                activity.displayDialog("Oops", getResources().getString(R.string.popup_no_module_name_exists), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
+                            } else if (wordList.isEmpty()) {
+                                activity.displayDialog("Oops", getResources().getString(R.string.popup_no_word_inside_exists), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
+                            } else {
+                                //int count = getActivity().getSupportFragmentManager().getBackStackEntryCount();
+                                getActivity().getSupportFragmentManager().popBackStack();
+                            }
                         });
                     }
                 }).start();
             }
         });
-
-        /*btStartMmf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickStartWordGuess();
-            }
-        });
-
-        btSettingsMmf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickSwapTranslationMode();
-            }
-        });
-
-        btCreateModuleMmf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().finish();
-            }
-        });
-
-        ibSettingsInformationMmf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickViewToolTip();
-            }
-        });
-
-        overlayDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                closeToolTip();
-            }
-        });*/
 
         return view;
     }

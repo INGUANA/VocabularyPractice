@@ -32,6 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private PrettyDialog dialogPopUp;
     private CoordinatorLayout colMainActivityMa;
     public AppDatabase DBInstance;
+    public static final String MAIN_MENU_FRAGMENT_TAG = "MAIN_MENU_FRAGMENT";
+    public static final String WORD_GUESS_FRAGMENT_TAG = "WORD_GUESS_FRAGMENT";
+    public static final String CREATE_MODULE_FRAGMENT_TAG = "CREATE_MODULE_FRAGMENT";
+    public static final String MODULE_LIST_FRAGMENT_TAG = "MODULE_LIST_FRAGMENT";
+
+
+
 
     public enum APICode {
         SUCCESS(200);
@@ -64,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initialize();
 
-        currentMainFragment = "MAIN_MENU_FRAGMENT";
-        getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragmentContainerMa, new MainMenuFragment(), currentMainFragment).commit();
+        currentMainFragment = MAIN_MENU_FRAGMENT_TAG;
+        getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragmentContainerMa, new MainMenuFragment(), currentMainFragment).addToBackStack(null).commit();
     }
 
     public void swapFragment(){
@@ -112,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO: Handle OnBackPressed to pop fragments correctly
+    //TODO: FEATURE: Option if should consider case sensitive or not
 
     @Override
     protected void attachBaseContext(Context newBase) {
