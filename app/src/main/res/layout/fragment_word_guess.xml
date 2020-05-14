@@ -1,47 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvSourceWordMmf"
-        android:layout_width="@dimen/textView_width"
-        android:layout_height="@dimen/textview_height"
-        android:text="NOTHING"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/pbProgressBarFwg"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:elevation="5dp"
+        android:visibility="gone"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btRevealMmf"/>
-
-    <Button
-        android:id="@+id/btRevealMmf"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="@dimen/button_height"
-        android:text="@string/fragment_word_guess_reveal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvTranslatedWordMmf"
-        app:layout_constraintTop_toBottomOf="@id/tvSourceWordMmf" />
-
-    <TextView
-        android:id="@+id/tvTranslatedWordMmf"
-        android:layout_width="@dimen/textView_width"
-        android:layout_height="@dimen/textview_height"
-        android:text="ANOTHA NOTHING"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/btRevealMmf"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <Button
-        android:id="@+id/btMainMenuMmf"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="@dimen/button_height_medium"
-        android:text="@string/fragment_word_guess_main_menu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.mikepenz.iconics.view.IconicsTextView
+        android:id="@+id/itvNoModulesMlf"
+        style="@style/ButtonTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_word_guess_finish_message"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btRedoFwg"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/margin_top_button"
+        android:text="@string/fragment_word_guess_redo"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/itvNoModulesMlf"
+        app:layout_constraintStart_toStartOf="@id/itvNoModulesMlf"
+        app:layout_constraintTop_toBottomOf="@id/itvNoModulesMlf" />
+
+    <Button
+        android:id="@+id/btChooseModuleFwg"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/margin_top_button"
+        android:text="@string/fragment_word_guess_choose_module"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/btRedoFwg"
+        app:layout_constraintStart_toStartOf="@id/btRedoFwg"
+        app:layout_constraintTop_toBottomOf="@id/btRedoFwg" />
+
+    <TextView
+        android:id="@+id/tvSourceWordFwg"
+        style="@style/MenuButtonTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="adsfadfasdfasdfasdf"
+        app:layout_constraintBottom_toTopOf="@+id/vLineSeparatorFwg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/vLineSeparatorFwg"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/pdlg_color_black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btMoveNextWordFwg"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/fragment_word_guess_move_next_word"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/vLineSeparatorFwg"
+        app:layout_constraintStart_toStartOf="@id/vLineSeparatorFwg" />
+
+    <TextView
+        android:id="@+id/tvDestinationWordFwg"
+        style="@style/MenuButtonTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="adsfadfasdfasdfasdf"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vLineSeparatorFwg" />
+
+    <ImageView
+        android:id="@+id/ivCurtainOfWordFwg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vLineSeparatorFwg" />
+
+    <Button
+        android:id="@+id/btDisplayWordFwg"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:text="@string/fragment_word_guess_see_translation"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="@id/vLineSeparatorFwg"
+        app:layout_constraintEnd_toEndOf="@id/vLineSeparatorFwg"
+        app:layout_constraintStart_toStartOf="@id/vLineSeparatorFwg"
+        app:layout_constraintTop_toTopOf="@id/vLineSeparatorFwg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

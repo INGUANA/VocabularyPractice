@@ -8,4 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme.AppCompat.Dialog.Transparent">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="MenuButtonTextStyle">
+        <item name="android:textSize">@dimen/text_size_average_medium</item>
+    </style>
+
+    <style name="ButtonTextStyle">
+        <item name="android:textColor">@color/pdlg_color_black</item>
+        <item name="android:textSize">@dimen/text_size_average</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TitleTextStyle">
+        <item name="android:textColor">@color/pdlg_color_black</item>
+        <item name="android:textSize">@dimen/text_size_average_xmedium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="HeaderInfoTextStyle">
+        <item name="android:textColor">@color/pdlg_color_black</item>
+        <item name="android:textSize">@dimen/text_size_average_medium</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

@@ -1,27 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--Button Widths-->
-    <dimen name="button_width">100dp</dimen>
-
     <!--PopUp Widths-->
     <dimen name="popup_width">120dp</dimen>
 
-    <!--TextView Widths-->
-    <dimen name="textView_width">120dp</dimen>
+    <!--Button Widths-->
+    <dimen name="button_width">200dp</dimen>
+    <dimen name="button_width_small">47dp</dimen>
 
     <!--Button Heights-->
-    <dimen name="button_height">40dp</dimen>
-    <dimen name="button_height_medium">60dp</dimen>
+    <dimen name="button_height_small">47dp</dimen>
+    <dimen name="button_height">50dp</dimen>
 
+    <!--Margin Top-->
+    <dimen name="margin_top_layout">10dp</dimen>
 
-    <!--TextView Heights-->
-    <dimen name="textview_height">40dp</dimen>
-
-    <!--Margin top-->
     <dimen name="margin_top_button">20dp</dimen>
+
+    <dimen name="margin_top_text">25dp</dimen>
 
     <!--Margin Start-->
     <dimen name="margin_start">20dp</dimen>
+    <dimen name="margin_start_small">25dp</dimen>
+
+    <!--Margin End-->
+    <dimen name="margin_end_small">8dp</dimen>
+    <dimen name="margin_end">20dp</dimen>
+
+    <!--Margin Bottom-->
+    <dimen name="margin_bottom">20dp</dimen>
+
+    <!--Text Height-->
+    <dimen name="edit_text_height">50dp</dimen>
+
+    <!--Box Height-->
+    <dimen name="box_height">50dp</dimen>
+
+    <!--Box Width-->
+    <dimen name="box_width">40dp</dimen>
+
+    <!--Text Size-->
+    <dimen name="text_size_average">15dp</dimen>
+    <dimen name="text_size_average_medium">21dp</dimen>
+    <dimen name="text_size_average_xmedium">26dp</dimen>
+
 
 </resources>
