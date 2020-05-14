@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.inguana.vocabularypractice.ModuleListFragment;
 import com.inguana.vocabularypractice.R;
 import com.inguana.vocabularypractice.Room.Word;
 
@@ -21,6 +22,10 @@ public class ModuleRecyclerViewArrayAdapter extends RecyclerView.Adapter<ModuleR
     private List<String> moduleList;
     private boolean isFirstHolder;
     private Fragment fragment;
+
+    public interface OnModuleClickListener {
+        void OnModuleClick(int clickedPosition);
+    }
 
     public List<String> getModuleList() {
         return moduleList;
@@ -52,7 +57,9 @@ public class ModuleRecyclerViewArrayAdapter extends RecyclerView.Adapter<ModuleR
             view.setOnCreateContextMenuListener(this);
             textView.setOnClickListener(view1 -> {
                 //TODO: Start module
-                int i = 0;
+                if(fragment instanceof ModuleListFragment) {
+                    ((ModuleListFragment)fragment).OnModuleClick(getAdapterPosition());
+                }
             });
             view.setOnCreateContextMenuListener(this);
         }
@@ -92,6 +99,10 @@ public class ModuleRecyclerViewArrayAdapter extends RecyclerView.Adapter<ModuleR
     @Override// Replace the contents of a view (invoked by the layout manager)
     public void onBindViewHolder(@NonNull ModuleRecyclerViewArrayAdapter.CustomViewHolder holder, int position) {
         holder.textView.setText(moduleList.get(position));
+    }
+
+    public String getItem(int position){
+        return moduleList.get(position);
     }
 
     @Override// Return the size of your dataset (invoked by the layout manager)

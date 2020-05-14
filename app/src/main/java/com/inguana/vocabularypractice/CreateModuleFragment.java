@@ -24,11 +24,13 @@ import com.inguana.vocabularypractice.Room.Word;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.view.IconicsImageView;
+import com.mikepenz.iconics.view.IconicsTextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter.ADD_BUTTON_NAME_INDICATOR;
 
@@ -49,7 +51,10 @@ public class CreateModuleFragment extends Fragment {
     private LinearLayoutManager layoutManager;
     private WordRecyclerViewArrayAdapter recyclerViewArrayAdapter;
     private IconicsImageView iivCreateUpdateNewModuleIconCmf;
-    private List<Word> wordList;
+    private IconicsTextView itvCreateUpdateNewModuleIconCmf;
+    private IconicsDrawable addNewWordIcon;
+    private List<Word> wordObjectList;
+    private List<String> wordList;
 
     public void initialize(View view, ViewGroup container) {
         fragmentContainerId = container.getId();
@@ -61,17 +66,12 @@ public class CreateModuleFragment extends Fragment {
         rvWordListCmf = view.findViewById(R.id.rvWordListCmf);
         iivCreateUpdateNewModuleIconCmf = view.findViewById(R.id.iivCreateUpdateNewModuleIconCmf);
         itvModuleTitleCmf = view.findViewById(R.id.itvModuleTitleCmf);
+        itvCreateUpdateNewModuleIconCmf = view.findViewById(R.id.itvCreateUpdateNewModuleIconCmf);
 
         clCreateUpdateMockLayoutCmf = view.findViewById(R.id.clCreateUpdateMockLayoutCmf);
 
         activity = ((MainActivity) getActivity());
         wordList = new ArrayList<>();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -85,36 +85,61 @@ public class CreateModuleFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         rvWordListCmf.setLayoutManager(layoutManager);
 
-        recyclerViewArrayAdapter = new WordRecyclerViewArrayAdapter(new ArrayList<>(Arrays.asList(ADD_BUTTON_NAME_INDICATOR)), getContext());//new ArrayList<>(Arrays.asList("")). Collections.singletonList("")) produces immutable list so i cant add additional element if i wanted to
+        Bundle argumentBundle = this.getArguments();
+        if (null != argumentBundle) {
+            initializeForUpdateModule(argumentBundle);
+        } else {
+            initializeForCreateModule();
+        }
+
+        wordList.add(ADD_BUTTON_NAME_INDICATOR);
+        recyclerViewArrayAdapter = new WordRecyclerViewArrayAdapter(wordList, getContext());//new ArrayList<>(Arrays.asList("")). Collections.singletonList("")) produces immutable list so i cant add additional element if i wanted to
         rvWordListCmf.setAdapter(recyclerViewArrayAdapter);
 
-        IconicsDrawable addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_create_new_folder);
         addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         iivCreateUpdateNewModuleIconCmf.setIcon(addNewWordIcon);
-        //using lambda instead of old ways: https://stackoverflow.com/questions/30752547/what-does-it-mean-that-a-listener-can-be-replaced-with-lambda
+
+        return view;
+    }
+
+    private void getWordListFromDB(String moduleToDisplay) {
+        try {
+            Thread DBThread = new Thread(() -> {
+                wordList = ConvertWordToString(activity.DBInstance.wordDao().getModule(moduleToDisplay));
+            });
+            DBThread.start();
+            DBThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeForUpdateModule(Bundle argumentBundle) {
+        String moduleToDisplay = argumentBundle.getString("SELECTED_MODULE_KEY");
+
+        itvModuleTitleCmf.setText(moduleToDisplay);
+        itvCreateUpdateNewModuleIconCmf.setText(R.string.fragment_create_module_update_module);
+        getWordListFromDB(moduleToDisplay);
+
+        addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_folder);
 
         clCreateUpdateMockLayoutCmf.setOnClickListener((View iivView) -> {
-            if(itvModuleTitleCmf.getText().toString().isEmpty()) {
+            if (itvModuleTitleCmf.getText().toString().isEmpty()) {
                 //TODO: play animation on button
                 activity.displayDialog("Error", getResources().getString(R.string.popup_empty_title), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             } else {
-                //DONE: add last word in wordlist without onFocus
-                //DONE: don't add empty words
-                //DONE: check if module exists, if exists 1. how it behaves(should replace) 2. make it so that it gives a warning.
-                //DONE: return to module list
                 AtomicBoolean moduleExists = new AtomicBoolean(false);
                 rvWordListCmf.clearFocus();
                 new Thread(() -> {
                     try {
-                        if(activity.DBInstance.wordDao().checkIfDuplicate(itvModuleTitleCmf.getText().toString())) {
+                        if (activity.DBInstance.wordDao().checkIfDuplicateExcept(itvModuleTitleCmf.getText().toString(), moduleToDisplay)) {
                             moduleExists.set(true);
                         } else {
-                            wordList = recyclerViewArrayAdapter.getCleanWordList(itvModuleTitleCmf.getText().toString());
-                            if(!wordList.isEmpty()) {
-                                activity.DBInstance.wordDao().insertAllModule(wordList);
-                                //activity.DBInstance.wordDao().delete(Collections.singletonList(new Word(ADD_BUTTON_NAME_INDICATOR, itvModuleTitleCmf.getText().toString())));
-
-                                activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
+                            wordObjectList = recyclerViewArrayAdapter.getCleanWordList(itvModuleTitleCmf.getText().toString());
+                            if (!wordObjectList.isEmpty()) {
+                                activity.DBInstance.wordDao().deleteByModuleName(moduleToDisplay);
+                                activity.DBInstance.wordDao().insertAllModule(wordObjectList);
+                                activity.displaySnackBar(getResources().getString(R.string.snackbar_edit_module_success), Snackbar.LENGTH_LONG);
                             }
                         }
 
@@ -122,9 +147,9 @@ public class CreateModuleFragment extends Fragment {
                         e.printStackTrace();
                     } finally {
                         getActivity().runOnUiThread(() -> {
-                            if(moduleExists.get()) {
+                            if (moduleExists.get()) {
                                 activity.displayDialog("Oops", getResources().getString(R.string.popup_no_module_name_exists), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
-                            } else if (wordList.isEmpty()) {
+                            } else if (wordObjectList.isEmpty()) {
                                 activity.displayDialog("Oops", getResources().getString(R.string.popup_no_word_inside_exists), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
                             } else {
                                 //int count = getActivity().getSupportFragmentManager().getBackStackEntryCount();
@@ -135,12 +160,56 @@ public class CreateModuleFragment extends Fragment {
                 }).start();
             }
         });
-
-        return view;
     }
 
-    public void addWordItem(String word) {
-        recyclerViewArrayAdapter.getWordList().add(word);
-        recyclerViewArrayAdapter.notifyItemInserted(recyclerViewArrayAdapter.getWordList().size() - 1);
+    private void initializeForCreateModule() {
+        itvCreateUpdateNewModuleIconCmf.setText(R.string.fragment_create_module_create_new_module);
+        addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_create_new_folder);
+
+        //using lambda instead of old ways: https://stackoverflow.com/questions/30752547/what-does-it-mean-that-a-listener-can-be-replaced-with-lambda
+        clCreateUpdateMockLayoutCmf.setOnClickListener((View iivView) -> {
+            if (itvModuleTitleCmf.getText().toString().isEmpty()) {
+                //TODO: play animation on button
+                activity.displayDialog("Error", getResources().getString(R.string.popup_empty_title), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+            } else {
+                AtomicBoolean moduleExists = new AtomicBoolean(false);
+                rvWordListCmf.clearFocus();
+                new Thread(() -> {
+                    try {
+                        if (activity.DBInstance.wordDao().checkIfDuplicate(itvModuleTitleCmf.getText().toString())) {
+                            moduleExists.set(true);
+                        } else {
+                            wordObjectList = recyclerViewArrayAdapter.getCleanWordList(itvModuleTitleCmf.getText().toString());
+                            if (!wordObjectList.isEmpty()) {
+                                activity.DBInstance.wordDao().insertAllModule(wordObjectList);
+                                //activity.DBInstance.wordDao().delete(Collections.singletonList(new Word(ADD_BUTTON_NAME_INDICATOR, itvModuleTitleCmf.getText().toString())));
+
+                                activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        getActivity().runOnUiThread(() -> {
+                            if (moduleExists.get()) {
+                                activity.displayDialog("Oops", getResources().getString(R.string.popup_no_module_name_exists), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
+                            } else if (wordObjectList.isEmpty()) {
+                                activity.displayDialog("Oops", getResources().getString(R.string.popup_no_word_inside_exists), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
+                            } else {
+                                //int count = getActivity().getSupportFragmentManager().getBackStackEntryCount();
+                                getActivity().getSupportFragmentManager().popBackStack();
+                            }
+                        });
+                    }
+                }).start();
+            }
+        });
+    }
+
+    private List<String> ConvertWordToString(List<Word> wordList) {
+        return wordList.stream()
+                .map(item -> item.getWord())
+                .collect(Collectors.toList());
     }
 }

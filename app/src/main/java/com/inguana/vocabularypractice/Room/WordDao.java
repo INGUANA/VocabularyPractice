@@ -29,9 +29,23 @@ public interface WordDao {
             "END;")
     boolean checkIfDuplicate(String module_name);
 
+    @Query("SELECT " +
+            "CASE WHEN EXISTS ( " +
+            "SELECT DISTINCT module_name FROM Word WHERE module_name = :module_name " +
+            "EXCEPT " +
+            "SELECT DISTINCT module_name FROM Word WHERE module_name = :except_module_name" +
+            ") " +
+            "THEN 1 " +
+            "ELSE 0 " +
+            "END;")
+    boolean checkIfDuplicateExcept(String module_name, String except_module_name);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAllModule(List<Word> newModule);//... means zero or more Word objects are eligible to pass as parameters
 
     @Delete
     void delete(List<Word> module);
+
+    @Query("DELETE FROM Word WHERE module_name = :module_name")
+    void deleteByModuleName(String module_name);
 }

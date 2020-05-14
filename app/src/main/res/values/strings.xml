@@ -11,6 +11,9 @@
 
     <string name="fragment_word_guess_see_translation">See Translation</string>
     <string name="fragment_word_guess_move_next_word">Next Word</string>
+    <string name="fragment_word_guess_finish_message">Finished! Redo current, or choose another module?</string>
+    <string name="fragment_word_guess_redo">Redo</string>
+    <string name="fragment_word_guess_choose_module">Choose module</string>
 
     <string name="fragment_create_module_title_t">Module Name Title</string>
     <string name="fragment_create_module_create_new_module">Create\nModule</string>
@@ -19,6 +22,7 @@
     <string name="fragment_module_list_edit_module">Edit\nModule</string>
     <string name="fragment_module_list_delete_module">Delete\nModule</string>
     <string name="fragment_module_list_info">Long press for more options</string>
+    <string name="fragment_module_list_no_modules">No modules yet.</string>
 
 
     <string name="fragment_module_list_module">New\nModule</string>
@@ -29,9 +33,15 @@
     <string name="popup_io_firebase_file_error">Something went wrong with files.</string>
     <string name="popup_no_module_name_exists">Module name already exists. Please choose a different name or edit the existing one.</string>
     <string name="popup_no_word_inside_exists">You haven\'t set any words to this module yet!</string>
+    <string name="popup_delete_confirmation">Are you sure you want to delete \"%1$s\" module?</string>
+    <string name="popup_delete_button">Delete</string>
+    <string name="popup_cancel_button">Cancel</string>
 
 
     <string name="snackbar_create_module_success">New Module created successfully!</string>
+    <string name="snackbar_edit_module_success">Module has been updated!</string>
+    <string name="snackbar_delete_module_success">Module has been deleted.</string>
+
 
 
 

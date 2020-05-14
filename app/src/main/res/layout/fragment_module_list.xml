@@ -26,6 +26,18 @@
         app:layout_constraintTop_toBottomOf="@id/tvInstructionsMlf"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <com.mikepenz.iconics.view.IconicsTextView
+        android:id="@+id/itvNoModulesMlf"
+        style="@style/ButtonTextStyle"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_module_list_no_modules"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clNewModuleMlf"
         android:layout_width="wrap_content"

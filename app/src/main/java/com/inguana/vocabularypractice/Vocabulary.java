@@ -8,14 +8,21 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Vocabulary {
 
     private List<String> vocabularyWords;
+    public static final String NO_WORD_IN_LIST = "123456789";
 
     public Vocabulary() {
         vocabularyWords = new ArrayList<>();
     }
+
+    public Vocabulary(List<String> vocabularyWords) {
+        this.vocabularyWords = vocabularyWords;
+    }
+
 
     public Vocabulary(String instanceLocalFilePath) {
         vocabularyWords = new ArrayList<>();
@@ -44,7 +51,19 @@ public class Vocabulary {
     }
 
     public String getRandomVocabularyWord() {
-        return vocabularyWords.get((int) (Math.random()*(vocabularyWords.size() + 1)));
+        String result;
+
+        if(0 == vocabularyWords.size()) {
+            result = NO_WORD_IN_LIST;
+        } else {
+            result = vocabularyWords.get(ThreadLocalRandom.current().nextInt(0, vocabularyWords.size())); // nextInt doesnt include last number of max, in this case it is beneficial since size is always +1 from list's last pos
+        }
+        return result;
+
+        //DONE: fix this shit^^^^^
+        //TODO: check delay from moduleList->WordGuess
+        //DONE: when list is ending present sth instead of crashing
+        //DONE: find what is going on with back on wordguess. (also this needs optimize as described in other TODO note)
     }
 
     public void removeWord(String wordToRemove) {

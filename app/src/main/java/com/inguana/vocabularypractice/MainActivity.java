@@ -32,13 +32,11 @@ public class MainActivity extends AppCompatActivity {
     private PrettyDialog dialogPopUp;
     private CoordinatorLayout colMainActivityMa;
     public AppDatabase DBInstance;
+    public APIInterface apiInterface;
     public static final String MAIN_MENU_FRAGMENT_TAG = "MAIN_MENU_FRAGMENT";
     public static final String WORD_GUESS_FRAGMENT_TAG = "WORD_GUESS_FRAGMENT";
     public static final String CREATE_MODULE_FRAGMENT_TAG = "CREATE_MODULE_FRAGMENT";
     public static final String MODULE_LIST_FRAGMENT_TAG = "MODULE_LIST_FRAGMENT";
-
-
-
 
     public enum APICode {
         SUCCESS(200);
@@ -63,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         DBInstance = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "Word-Database").build();
 
+        JsonGetter.getRetrofitInstance(); //needs fixing
+        apiInterface = JsonGetter.buildService(APIInterface.class);
     }
 
     @Override
@@ -97,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
         //}
     }
 
+    public PrettyDialog displayOptionDialog(String title, String message, int icon, int iconColor) {
+        displayDialog(title, message, icon, iconColor);
+        return dialogPopUp;
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(KeyEvent.KEYCODE_VOLUME_DOWN == keyCode) {
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO: Handle OnBackPressed to pop fragments correctly
     //TODO: FEATURE: Option if should consider case sensitive or not
-
+    //TODO: investigate why it behaves weird whne push notification from other app appears
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(IconicsContextWrapper.wrap(newBase));

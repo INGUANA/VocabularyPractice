@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyclerViewArrayAdapter.CustomViewHolder> {
 
     private List<String> wordList;
-    private boolean isFirstHolder;
     private Context context;
     public static final String ADD_BUTTON_NAME_INDICATOR = "###BUTTON###";
 
@@ -84,7 +83,6 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
 
     public WordRecyclerViewArrayAdapter(List<String> wordList, Context context) {
         this.wordList = wordList;
-        isFirstHolder = true;
         this.context = context;
     }
 
@@ -105,10 +103,9 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
         //create a new view
         View view;
         CustomViewHolder viewHolder;
-        if (0 == viewType/*isFirstHolder*/) {
+        if (0 == viewType) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_add_item, parent, false);
             viewHolder = new CustomViewHolder(view, wordList, context, this);
-            isFirstHolder = false;
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_edittextview_item, parent, false);
             viewHolder = new CustomViewHolder(view, wordList);

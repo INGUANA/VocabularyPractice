@@ -163,12 +163,10 @@ public class MainMenuFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                JsonGetter.getRetrofitInstance(); //needs fixing
-                final APIInterface apiInterface = JsonGetter.buildService(APIInterface.class);
 
                 for (int i = 0; 5 > i; i++) {
                     String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
-                    Call<BaseResponse> call = apiInterface.getWordTranslation(iterationWord);
+                    Call<BaseResponse> call = activity.apiInterface.getWordTranslation(iterationWord);
                     //Call<Object> call = APIInterface.getLangs("dict.1.1.20191113T191908Z.b09388c3c67363c8.a16b9135d70ffed223b2a9e83d3ae4d1cc3b95f7"); dictionary call
                     try {
                         Response<BaseResponse> response = call.execute(
@@ -191,7 +189,7 @@ public class MainMenuFragment extends Fragment {
                     pbProgressBarMmf.setVisibility(View.GONE);
                     if (!activity.translationPairList.isEmpty()) {
                         activity.currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
-                        getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment(), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment(), WORD_GUESS_FRAGMENT_TAG).addToBackStack("WORD_GUESS_FROM_MENU").commit();
                     } else {
                         activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                     }
