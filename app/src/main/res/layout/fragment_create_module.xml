@@ -26,31 +26,12 @@
         app:layout_constraintTop_toBottomOf="@id/itvModuleTitleCmf"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clCreateUpdateMockLayoutCmf"
+    <include
+        layout="@layout/layout_image_button_iconics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_end"
+        android:layout_marginBottom="@dimen/margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/iivCreateUpdateNewModuleIconCmf"
-            android:layout_width="@dimen/box_width"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_end_small"
-            app:layout_constraintBottom_toBottomOf="@+id/itvCreateUpdateNewModuleIconCmf"
-            app:layout_constraintEnd_toStartOf="@id/itvCreateUpdateNewModuleIconCmf"
-            app:layout_constraintTop_toTopOf="@id/itvCreateUpdateNewModuleIconCmf" />
-
-        <com.mikepenz.iconics.view.IconicsTextView
-            android:id="@+id/itvCreateUpdateNewModuleIconCmf"
-            style="@style/ButtonTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_end"
-            android:layout_marginBottom="@dimen/margin_bottom"
-            android:text="@string/fragment_create_module_create_new_module"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -45,13 +45,14 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
     private Dialog overlayDialog;
     private MainActivity activity;
     private RecyclerView rvModuleListMlf;
-    private CircularProgressView pbProgressBarMmf;
+    private CircularProgressView pbProgressBarMlf;
     private LinearLayoutManager layoutManager;
     private ModuleRecyclerViewArrayAdapter recyclerViewArrayAdapter;
     private List<String> moduleStringList, wordList;
     private IconicsImageView iivNewModuleIconMlf;
     private ConstraintLayout clNewModuleMlf;
     private IconicsTextView itvNoModulesMlf;
+    private int timesFailedGetTranslation;
 
     public void initialize(View view, ViewGroup container) {
         fragmentContainerId = container.getId();
@@ -59,14 +60,15 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
         overlayDialog = new Dialog(getContext(), R.style.Theme_AppCompat_Dialog_Transparent);
         overlayDialog.setCancelable(true);
 
-        pbProgressBarMmf = view.findViewById(R.id.pbProgressBarMmf);
+        pbProgressBarMlf = view.findViewById(R.id.pbProgressBarMlf);
         rvModuleListMlf = view.findViewById(R.id.rvModuleListMlf);
         clNewModuleMlf = view.findViewById(R.id.clNewModuleMlf);
 
         iivNewModuleIconMlf = view.findViewById(R.id.iivNewModuleIconMlf);
-        itvNoModulesMlf = view.findViewById(R.id.itvNoModulesMlf);
+        itvNoModulesMlf = view.findViewById(R.id.itvNoWordsMlf);
 
         activity = ((MainActivity) getActivity());
+        timesFailedGetTranslation = 0;
     }
 
     @Nullable
@@ -173,6 +175,7 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
         recyclerViewArrayAdapter.notifyItemRangeChanged(removePosition, moduleStringList.size());
     }
 
+    //TODO:this exists in word guess fragment . centralize it
     private CreateModuleFragment prepareFragment(String moduleName) {
         Bundle bundle = new Bundle();
         bundle.putString("SELECTED_MODULE_KEY", moduleName);
@@ -182,63 +185,90 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
         return createModuleFragment;
     }
 
+    private WordGuessFragment prepareFragment(int modulePosition) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("SELECTED_MODULE_POSITION_KEY", modulePosition);
+        WordGuessFragment wordGuessFragment = new WordGuessFragment();
+        wordGuessFragment.setArguments(bundle);
+
+        return wordGuessFragment;
+    }
+
     @Override
     public void OnModuleClick(int positionClicked) {
-        //TODO: put progress bar
+        //DONE: put progress bar
         //DONE: make call for getting 1st word translation
 
         getWordListFromDB(recyclerViewArrayAdapter.getItem(positionClicked));
         activity.sessionVocabulary = new Vocabulary(wordList);
+
+        moduleCall(positionClicked);
+    }
+
+    //TODO: maybe positionClicked should be class field
+    private void moduleCall(int positionClicked) {
         final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
         if (NO_WORD_IN_LIST.equals(iterationWord)) {
             activity.displayDialog("Error", getResources().getString(R.string.popup_no_word_inside_exists), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         } else {
-            makeModuleCall(iterationWord);
+            if (activity.isNetworkAvailable()) {
+                pbProgressBarMlf.setVisibility(View.VISIBLE);
+                makeModuleCall(iterationWord, positionClicked);
+            } else {
+                activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+            }
         }
     }
 
-    private void makeModuleCall(String iterationWord) {
-        if (activity.isNetworkAvailable()) {
-            //pbProgressBarMmf.setVisibility(View.VISIBLE);
+    private void makeModuleCall(String iterationWord, int positionClicked) {
+        Call<BaseResponse> call = activity.apiInterface.getWordTranslation(iterationWord);
 
-            Call<BaseResponse> call = activity.apiInterface.getWordTranslation(iterationWord);
+        try {
+            call.enqueue(new Callback<BaseResponse>() {
+                @Override
+                public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                    pbProgressBarMlf.setVisibility(View.GONE);
+                    if (response.isSuccessful()) {
+                        //activity.sourcePairList.remove(0);
+                        //activity.translationPairList.remove(0);
+                        if (response.body().getData().get(0).getJapanese().get(0).getReading().isEmpty()) {
+                            timesFailedGetTranslation++;
 
-            try {
-                call.enqueue(new Callback<BaseResponse>() {
-                    @Override
-                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                        //pbProgressBarMmf.setVisibility(View.GONE);
-                        if (response.isSuccessful()) {
-                            //activity.sourcePairList.remove(0);
-                            //activity.translationPairList.remove(0);
-
-                            activity.sourcePairList.add(iterationWord);
-                            activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
                             activity.sessionVocabulary.removeWord(iterationWord);
-
-                            //TODO: Make WordGuess fragment to handle words differently (adding many words to backstack wont be good)
-                            activity.currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment(), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
+                            if (5 == timesFailedGetTranslation) {
+                                //display refresh message
+                                activity.displayDialog("Error", getResources().getString(R.string.popup_fail_cannot_get_translation), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                            } else {
+                                moduleCall(positionClicked);
+                            }
                         } else {
-                            //onClickMoveToNextWord();
-                            activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                            timesFailedGetTranslation = 0;
+
+                            /*activity.sourcePairList.add(iterationWord);
+                            activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
+                            activity.sessionVocabulary.removeWord(iterationWord);*/
+                            activity.prepareDisplayLists(true, iterationWord, response.body().getData().get(0).getJapanese().get(0).getReading());
+                            //activity.currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, prepareFragment(positionClicked), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
                         }
+                    } else {
+                        //onClickMoveToNextWord();
+                        activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                     }
+                }
 
-                    @Override
-                    public void onFailure(Call<BaseResponse> call, Throwable t) {
-                        //something wrong with internet
-                        //pbProgressBarMmf.setVisibility(View.GONE);
-                        activity.displayDialog("Error", "DIDNT get translation. Refresh", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
-                    }
-                });
+                @Override
+                public void onFailure(Call<BaseResponse> call, Throwable t) {
+                    //something wrong with internet
+                    pbProgressBarMlf.setVisibility(View.GONE);
+                    activity.displayDialog("Error", "DIDNT get translation. Refresh", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                }
+            });
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     private void getWordListFromDB(String moduleToDisplay) {

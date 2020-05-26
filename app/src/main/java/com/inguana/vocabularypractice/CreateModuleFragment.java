@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.storage.StorageReference;
 import com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter;
 import com.inguana.vocabularypractice.Room.Word;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -27,7 +24,6 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.iconics.view.IconicsTextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -47,11 +43,11 @@ public class CreateModuleFragment extends Fragment {
     private MainActivity activity;
     private CircularProgressView pbProgressBarMmf;
     private RecyclerView rvWordListCmf;
-    private ViewGroup clCreateUpdateMockLayoutCmf;
+    private ViewGroup clCreateUpdateMockLayoutLibi;
     private LinearLayoutManager layoutManager;
     private WordRecyclerViewArrayAdapter recyclerViewArrayAdapter;
-    private IconicsImageView iivCreateUpdateNewModuleIconCmf;
-    private IconicsTextView itvCreateUpdateNewModuleIconCmf;
+    private IconicsImageView iivCreateUpdateNewModuleIconLibi;
+    private IconicsTextView itvCreateUpdateNewModuleIconLibi;
     private IconicsDrawable addNewWordIcon;
     private List<Word> wordObjectList;
     private List<String> wordList;
@@ -64,11 +60,11 @@ public class CreateModuleFragment extends Fragment {
 
         pbProgressBarMmf = view.findViewById(R.id.pbProgressBarMmf);
         rvWordListCmf = view.findViewById(R.id.rvWordListCmf);
-        iivCreateUpdateNewModuleIconCmf = view.findViewById(R.id.iivCreateUpdateNewModuleIconCmf);
+        iivCreateUpdateNewModuleIconLibi = view.findViewById(R.id.iivButtonIconLibi);
         itvModuleTitleCmf = view.findViewById(R.id.itvModuleTitleCmf);
-        itvCreateUpdateNewModuleIconCmf = view.findViewById(R.id.itvCreateUpdateNewModuleIconCmf);
+        itvCreateUpdateNewModuleIconLibi = view.findViewById(R.id.itvTextButtonIconLibi);
 
-        clCreateUpdateMockLayoutCmf = view.findViewById(R.id.clCreateUpdateMockLayoutCmf);
+        clCreateUpdateMockLayoutLibi = view.findViewById(R.id.clButtonLayoutLibi);
 
         activity = ((MainActivity) getActivity());
         wordList = new ArrayList<>();
@@ -97,7 +93,7 @@ public class CreateModuleFragment extends Fragment {
         rvWordListCmf.setAdapter(recyclerViewArrayAdapter);
 
         addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
-        iivCreateUpdateNewModuleIconCmf.setIcon(addNewWordIcon);
+        iivCreateUpdateNewModuleIconLibi.setIcon(addNewWordIcon);
 
         return view;
     }
@@ -118,12 +114,12 @@ public class CreateModuleFragment extends Fragment {
         String moduleToDisplay = argumentBundle.getString("SELECTED_MODULE_KEY");
 
         itvModuleTitleCmf.setText(moduleToDisplay);
-        itvCreateUpdateNewModuleIconCmf.setText(R.string.fragment_create_module_update_module);
+        itvCreateUpdateNewModuleIconLibi.setText(R.string.fragment_create_module_update_module);
         getWordListFromDB(moduleToDisplay);
 
         addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_folder);
 
-        clCreateUpdateMockLayoutCmf.setOnClickListener((View iivView) -> {
+        clCreateUpdateMockLayoutLibi.setOnClickListener((View iivView) -> {
             if (itvModuleTitleCmf.getText().toString().isEmpty()) {
                 //TODO: play animation on button
                 activity.displayDialog("Error", getResources().getString(R.string.popup_empty_title), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
@@ -163,11 +159,11 @@ public class CreateModuleFragment extends Fragment {
     }
 
     private void initializeForCreateModule() {
-        itvCreateUpdateNewModuleIconCmf.setText(R.string.fragment_create_module_create_new_module);
+        itvCreateUpdateNewModuleIconLibi.setText(R.string.fragment_create_module_create_new_module);
         addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_create_new_folder);
 
         //using lambda instead of old ways: https://stackoverflow.com/questions/30752547/what-does-it-mean-that-a-listener-can-be-replaced-with-lambda
-        clCreateUpdateMockLayoutCmf.setOnClickListener((View iivView) -> {
+        clCreateUpdateMockLayoutLibi.setOnClickListener((View iivView) -> {
             if (itvModuleTitleCmf.getText().toString().isEmpty()) {
                 //TODO: play animation on button
                 activity.displayDialog("Error", getResources().getString(R.string.popup_empty_title), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);

@@ -26,7 +26,7 @@ import libs.mjn.prettydialog.PrettyDialog;
 public class MainActivity extends AppCompatActivity {
 
     //private FrameLayout flMainFragmentContainerMa;
-    public String currentMainFragment;
+    public String currentMainFragment, wordToBeAddedToModule;
     public Vocabulary vocabulary, sessionVocabulary;
     public List<String> translationPairList, sourcePairList;
     private PrettyDialog dialogPopUp;
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         JsonGetter.getRetrofitInstance(); //needs fixing
         apiInterface = JsonGetter.buildService(APIInterface.class);
+        wordToBeAddedToModule = "";
     }
 
     @Override
@@ -123,9 +124,26 @@ public class MainActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    public void prepareDisplayLists(boolean isTransitioning, String iterationWord, String translationWord) {
+        if (isTransitioning) {
+            sourcePairList = new ArrayList<>();
+            translationPairList = new ArrayList<>();
+        }
+
+        sourcePairList.add(iterationWord);
+        translationPairList.add(translationWord);
+
+        sessionVocabulary.removeWord(iterationWord);
+
+        //TODO: investigate whether i need this or not. if i do, then i make the tags as enum and i pass it
+        //currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
+    }
+
     //TODO: Handle OnBackPressed to pop fragments correctly
     //TODO: FEATURE: Option if should consider case sensitive or not
     //TODO: investigate why it behaves weird whne push notification from other app appears
+    //TODO: bundle same code to be written one time only (example when you go to word guess, you have to do several things to join)
+    //TODO: module word calling in wordguess is the same as in module list. place calls in the DAO (they require bundling)
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(IconicsContextWrapper.wrap(newBase));

@@ -172,9 +172,13 @@ public class MainMenuFragment extends Fragment {
                         Response<BaseResponse> response = call.execute(
                         );
                         if (response.isSuccessful()/*MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()*/) {
-                            activity.sourcePairList.add(iterationWord);
-                            activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
-                            activity.sessionVocabulary.removeWord(iterationWord);
+                            if(!response.body().getData().get(0).getJapanese().get(0).getReading().isEmpty()) {
+                                //TODO:
+                                activity.prepareDisplayLists(true, iterationWord, response.body().getData().get(0).getJapanese().get(0).getReading());
+                                /*activity.sourcePairList.add(iterationWord);
+                                activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
+                                activity.sessionVocabulary.removeWord(iterationWord);*/
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -18,8 +18,10 @@
     <dimen name="margin_top_button">20dp</dimen>
 
     <dimen name="margin_top_text">25dp</dimen>
+    <dimen name="margin_top_image">80dp</dimen>
 
     <!--Margin Start-->
+    <dimen name="margin_start_xsmall">8dp</dimen>
     <dimen name="margin_start">20dp</dimen>
     <dimen name="margin_start_small">25dp</dimen>
 
@@ -29,6 +31,7 @@
 
     <!--Margin Bottom-->
     <dimen name="margin_bottom">20dp</dimen>
+    <dimen name="margin_bottom_image">80dp</dimen>
 
     <!--Text Height-->
     <dimen name="edit_text_height">50dp</dimen>
@@ -37,6 +40,7 @@
     <dimen name="box_height">50dp</dimen>
 
     <!--Box Width-->
+    <dimen name="box_width_small">40dp</dimen>
     <dimen name="box_width">40dp</dimen>
 
     <!--Text Size-->
