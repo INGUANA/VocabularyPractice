@@ -19,12 +19,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.inguana.vocabularypractice.Room.Word;
 import com.inguana.vocabularypractice.rest.response.BaseResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -114,9 +112,16 @@ public class MainMenuFragment extends Fragment {
         mainMenuFragment.setArguments(startButtonBundle);
 
         pbProgressBarMmf.setVisibility(View.VISIBLE);
-        downloadFirebaseFile();
 
-
+        final File checkFileInstance = new File(getContext().getFilesDir(),"vocabulary.txt");
+        if (checkFileInstance.exists()) {
+            String instanceLocalFile = checkFileInstance.getPath();
+            activity.vocabulary = new Vocabulary(instanceLocalFile);
+            activity.sessionVocabulary = new Vocabulary(instanceLocalFile);
+            getTranslationRequest();
+        } else {
+            downloadFirebaseFile();
+        }
         //if inNetworkAvailable
         //make it as modular as possible, here comes the new curent fragment declaration, but is there another way besides ((MainActivity)getActivity().....
     }
@@ -125,21 +130,17 @@ public class MainMenuFragment extends Fragment {
     private void downloadFirebaseFile() {
         if(activity.isNetworkAvailable()) {
             final StorageReference vocabularyFirebaseRef = mStorageRef.child(VOCABULARY_WORDS_PATH);
-            final File checkFileInstance = new File("vocabulary.txt");
-            File localFile = null;
+            final File checkFileInstance = new File(getContext().getFilesDir(),"vocabulary.txt");
             try {
-                if (checkFileInstance.exists()) {
-                    checkFileInstance.delete();
-                }
-                localFile = File.createTempFile("vocabulary", "txt", getContext().getFilesDir());
-                //NOTE: delete file when finished or when error. (myContext.deleteFile(fileName)
-                //https://developer.android.com/training/data-storage/files/internal#DeleteFile
+                checkFileInstance.createNewFile();
+                //File API: https://developer.android.com/reference/java/io/File#File(java.lang.String)
+                //Storage Methods: https://developer.android.com/training/data-storage
             } catch (IOException e) {
                 e.printStackTrace();
                 activity.displayDialog("Error", getResources().getString(R.string.popup_io_firebase_file_error), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             }
-            final String instanceLocalFile = localFile.getPath();
-            firebaseTask = vocabularyFirebaseRef.getFile(localFile);//asynchronous
+            final String instanceLocalFile = checkFileInstance.getPath();
+            firebaseTask = vocabularyFirebaseRef.getFile(checkFileInstance);//asynchronous
 
             firebaseTask.addOnSuccessListener((OnSuccessListener<FileDownloadTask.TaskSnapshot>) taskSnapshot -> {
                 // Successfully downloaded data to local file

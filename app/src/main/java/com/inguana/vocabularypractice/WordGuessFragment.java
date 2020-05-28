@@ -99,9 +99,9 @@ public class WordGuessFragment extends Fragment {
         //initializeTextViews();
         setModuleList();
         updateLayoutWithText();
+        makePreviousButtonOpaque(true);
         clWordGuessFragmentFwg.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeRight() {
-                //go back
                 onClickMoveToPreviousWord();
             }
 
@@ -155,9 +155,10 @@ public class WordGuessFragment extends Fragment {
     }
 
     private void onClickMoveToPreviousWord() {
-        if (0 == currentWordPosition) {
-            //change color
-        } else {
+        if(0 != currentWordPosition) {
+            if (1 == currentWordPosition) {
+                makePreviousButtonOpaque(true);
+            }
             currentWordPosition--;
             updateLayoutWithText();
         }
@@ -167,14 +168,21 @@ public class WordGuessFragment extends Fragment {
 
         final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
         if (NO_WORD_IN_LIST.equals(iterationWord)) {
-            //TODO: make end credits, and return to where u came from button
             swapLayout(true);
         } else if (activity.sourcePairList.contains(iterationWord)) {
+            makePreviousButtonOpaque(false);
             displayNextWord(iterationWord);
         } else {
+            makePreviousButtonOpaque(false);
             makeCallForNextWord(iterationWord);
         }
 
+    }
+
+    private void makePreviousButtonOpaque(boolean makeOpaque) {
+        if(null != iivSlideLeftFwg.getIcon()) {
+            iivSlideLeftFwg.getIcon().setAlpha(makeOpaque ? 80 : 200);
+        }
     }
 
     private void swapLayout(boolean isEndOfModule) {
