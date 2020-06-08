@@ -42,10 +42,8 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
 
     private int fragmentContainerId;
 
-    private Dialog overlayDialog;
     private MainActivity activity;
     private RecyclerView rvModuleListMlf;
-    private CircularProgressView pbProgressBarMlf;
     private LinearLayoutManager layoutManager;
     private ModuleRecyclerViewArrayAdapter recyclerViewArrayAdapter;
     private List<String> moduleStringList, wordList;
@@ -57,10 +55,6 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
     public void initialize(View view, ViewGroup container) {
         fragmentContainerId = container.getId();
 
-        overlayDialog = new Dialog(getContext(), R.style.Theme_AppCompat_Dialog_Transparent);
-        overlayDialog.setCancelable(true);
-
-        pbProgressBarMlf = view.findViewById(R.id.pbProgressBarMlf);
         rvModuleListMlf = view.findViewById(R.id.rvModuleListMlf);
         clNewModuleMlf = view.findViewById(R.id.clNewModuleMlf);
 
@@ -209,10 +203,12 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
     private void moduleCall(int positionClicked) {
         final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
         if (NO_WORD_IN_LIST.equals(iterationWord)) {
-            activity.displayDialog("Error", getResources().getString(R.string.popup_no_word_inside_exists), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+            activity.displayDialog("Error", getResources().getString(R.string.popup_word_missspell_warning), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         } else {
             if (activity.isNetworkAvailable()) {
-                pbProgressBarMlf.setVisibility(View.VISIBLE);
+                if (!activity.isProgressBarVisible()) {
+                    activity.startTransition(true);
+                }
                 makeModuleCall(iterationWord, positionClicked);
             } else {
                 activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
@@ -227,7 +223,6 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
             call.enqueue(new Callback<BaseResponse>() {
                 @Override
                 public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                    pbProgressBarMlf.setVisibility(View.GONE);
                     if (response.isSuccessful()) {
                         //activity.sourcePairList.remove(0);
                         //activity.translationPairList.remove(0);
@@ -236,13 +231,14 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
 
                             activity.sessionVocabulary.removeWord(iterationWord);
                             if (5 == timesFailedGetTranslation) {
-                                //display refresh message
+                                activity.startTransition(false);
                                 activity.displayDialog("Error", getResources().getString(R.string.popup_fail_cannot_get_translation), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                             } else {
                                 moduleCall(positionClicked);
                             }
                         } else {
                             timesFailedGetTranslation = 0;
+                            activity.startTransition(false);
 
                             /*activity.sourcePairList.add(iterationWord);
                             activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
@@ -252,16 +248,16 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
                             getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, prepareFragment(positionClicked), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
                         }
                     } else {
-                        //onClickMoveToNextWord();
-                        activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                        activity.startTransition(false);
+                        activity.displayDialog("Error", getResources().getString(R.string.popup_no_translation_retrieved), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<BaseResponse> call, Throwable t) {
                     //something wrong with internet
-                    pbProgressBarMlf.setVisibility(View.GONE);
-                    activity.displayDialog("Error", "DIDNT get translation. Refresh", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                    activity.startTransition(false);
+                    activity.displayDialog("Error", getResources().getString(R.string.popup_no_translation_retrieved_fail_response), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                 }
             });
 

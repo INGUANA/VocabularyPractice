@@ -6,10 +6,13 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Word.class}, version = 1)
+import com.inguana.vocabularypractice.Room.Migrations.Migration1To2;
+
+@Database(entities = {Word.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
+    private static final Migration1To2 migration1To2 = new Migration1To2(1,2);
 
     public abstract WordDao wordDao();
 
@@ -19,6 +22,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "Sample.db")
+                            .addMigrations(migration1To2)
                             .build();
                 }
             }

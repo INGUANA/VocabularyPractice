@@ -5,20 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.rahatarmanahmed.cpv.CircularProgressView
-        android:id="@+id/pbProgressBarFwg"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        android:elevation="5dp"
-        android:visibility="gone"
-        app:cpv_animAutostart="true"
-        app:cpv_indeterminate="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <include
         layout="@layout/layout_image_button_iconics"
         android:layout_width="wrap_content"
@@ -30,7 +16,7 @@
 
     <com.mikepenz.iconics.view.IconicsTextView
         android:id="@+id/itvNoWordsMlf"
-        style="@style/ButtonTextStyle"
+        style="@style/HeaderInfoTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/fragment_word_guess_finish_message"
@@ -42,8 +28,8 @@
 
     <Button
         android:id="@+id/btRedoFwg"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/button_width_medium"
+        android:layout_height="@dimen/button_height_medium"
         android:layout_marginTop="@dimen/margin_top_button"
         android:text="@string/fragment_word_guess_redo"
         android:textAllCaps="false"
@@ -54,8 +40,8 @@
 
     <Button
         android:id="@+id/btNextModuleFwg"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/button_width_medium"
+        android:layout_height="@dimen/button_height_medium"
         android:layout_marginTop="@dimen/margin_top_button"
         android:text="@string/fragment_word_guess_choose_module"
         android:textAllCaps="false"
@@ -145,8 +131,8 @@
 
     <Button
         android:id="@+id/btDisplayWordFwg"
-        android:layout_width="100dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/button_width_medium"
+        android:layout_height="@dimen/button_height_medium"
         android:text="@string/fragment_word_guess_see_translation"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@id/vLineSeparatorFwg"

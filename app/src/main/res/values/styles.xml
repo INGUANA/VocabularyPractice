@@ -30,7 +30,7 @@
 
     <style name="HeaderInfoTextStyle">
         <item name="android:textColor">@color/pdlg_color_black</item>
-        <item name="android:textSize">@dimen/text_size_average_medium</item>
+        <item name="android:textSize">@dimen/text_size_average_medium_small</item>
         <item name="android:gravity">center</item>
     </style>
 

@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.snackbar.Snackbar;
 import com.inguana.vocabularypractice.CustomExtensions.CustomAnimatorListener;
 import com.inguana.vocabularypractice.CustomExtensions.OnSwipeTouchListener;
@@ -47,7 +46,6 @@ import static com.inguana.vocabularypractice.Vocabulary.NO_WORD_IN_LIST;
 public class WordGuessFragment extends Fragment {
 
     private TextView tvSourceWordFwg, tvDestinationWordFwg;
-    private CircularProgressView pbProgressBarFwg;
     private Button btMoveNextWordFwg, btDisplayWordFwg, btRedoFwg, btNextModuleFwg;
     private ImageView ivCurtainOfWordFwg;
     private MainActivity activity;
@@ -55,8 +53,10 @@ public class WordGuessFragment extends Fragment {
     private IconicsTextView itvNoWordsMlf, itvAddToModuleLibi;
     private IconicsImageView iivAddToModuleLibi, iivSlideRightFwg, iivSlideLeftFwg;
     private View vLineSeparatorFwg;
+    private View.OnClickListener curtainOnClickListener;
     private int fragmentContainerId, currentWordPosition, timesFailedGetTranslation, nextModulePosition;
     private List<String> moduleStringList, wordList;
+    private String wordToBeAddedToModule;
     private YoYo.YoYoString animationSource, animationCurtain, animationDestination;
 
     private void initialize(View view, ViewGroup container) {
@@ -67,8 +67,6 @@ public class WordGuessFragment extends Fragment {
         btDisplayWordFwg = view.findViewById(R.id.btDisplayWordFwg);
         btRedoFwg = view.findViewById(R.id.btRedoFwg);
         btNextModuleFwg = view.findViewById(R.id.btNextModuleFwg);
-
-        pbProgressBarFwg = view.findViewById((R.id.pbProgressBarFwg));
 
         ivCurtainOfWordFwg = view.findViewById(R.id.ivCurtainOfWordFwg);
         itvNoWordsMlf = view.findViewById(R.id.itvNoWordsMlf);
@@ -84,10 +82,25 @@ public class WordGuessFragment extends Fragment {
         fragmentContainerId = container.getId();
 
         currentWordPosition = 0;
-        nextModulePosition = null != getArguments() ? getArguments().getInt("SELECTED_MODULE_POSITION_KEY") + 1 : 0;
 
         activity = ((MainActivity) getActivity());
         timesFailedGetTranslation = 0;
+
+        curtainOnClickListener = view1 -> {
+            if (null != animationCurtain) {
+                animationCurtain.stop(true);
+            }
+            animationCurtain = YoYo.with(Techniques.FadeOutDown)
+                    .duration(500)
+                    .playOn(ivCurtainOfWordFwg);
+            view1.setOnClickListener(null);
+        };
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        nextModulePosition = null != getArguments() ? getArguments().getInt("SELECTED_MODULE_POSITION_KEY") + 1 : 0;
     }
 
     //TODO: Fade inOut animation with 2 curtains (one on left one on down)
@@ -98,8 +111,7 @@ public class WordGuessFragment extends Fragment {
         initialize(view, container);
         //initializeTextViews();
         setModuleList();
-        updateLayoutWithText();
-        makePreviousButtonOpaque(true);
+        updateLayoutWithText(true);
         clWordGuessFragmentFwg.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             public void onSwipeRight() {
                 onClickMoveToPreviousWord();
@@ -130,21 +142,13 @@ public class WordGuessFragment extends Fragment {
         registerForContextMenu(clAddWordToModuleMockLayoutLibi);
         clAddWordToModuleMockLayoutLibi.setOnClickListener((View iivView) -> {
             //clAddWordToModuleMockLayoutLibi.performLongClick();
-            activity.wordToBeAddedToModule = activity.sourcePairList.get(currentWordPosition);
+            wordToBeAddedToModule = activity.sourcePairList.get(currentWordPosition);
             clAddWordToModuleMockLayoutLibi.showContextMenu();
             //activity.getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new ModuleListFragment(), MODULE_LIST_FRAGMENT_TAG).addToBackStack(null).commit();
         });
 
-        btDisplayWordFwg.setOnClickListener(view1 -> {
-            /*ivCurtainOfWordFwg.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.anim_down));
-            ivCurtainOfWordFwg.setVisibility(View.GONE);*/
-            if (null != animationCurtain) {
-                animationCurtain.stop(true);
-            }
-            animationCurtain = YoYo.with(Techniques.FadeOutDown)
-                    .duration(500)
-                    .playOn(ivCurtainOfWordFwg);
-        });
+        btDisplayWordFwg.setOnClickListener(curtainOnClickListener);
+
 
         btMoveNextWordFwg.setOnClickListener(view12 -> onClickMoveToNextWord());
 
@@ -154,36 +158,45 @@ public class WordGuessFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        makePreviousButtonOpaque(true);
+    }
+
     private void onClickMoveToPreviousWord() {
-        if(0 != currentWordPosition) {
+        if (0 != currentWordPosition) {
             if (1 == currentWordPosition) {
                 makePreviousButtonOpaque(true);
             }
             currentWordPosition--;
-            updateLayoutWithText();
+            updateLayoutWithText(false);
         }
     }
 
     private void onClickMoveToNextWord() {
-
-        final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
-        if (NO_WORD_IN_LIST.equals(iterationWord)) {
-            swapLayout(true);
-        } else if (activity.sourcePairList.contains(iterationWord)) {
-            makePreviousButtonOpaque(false);
-            displayNextWord(iterationWord);
+        makePreviousButtonOpaque(false);
+        if(currentWordPosition + 1 <= activity.translationPairList.size() - 1) {
+            displayNextWord();
         } else {
-            makePreviousButtonOpaque(false);
-            makeCallForNextWord(iterationWord);
+            final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
+            if (NO_WORD_IN_LIST.equals(iterationWord)) {
+                swapLayout(true);
+            } else if (activity.sourcePairList.contains(iterationWord)) {
+                displayNextWord(iterationWord);
+            } else {
+                makeCallForNextWord(iterationWord);
+            }
         }
 
     }
 
     private void makePreviousButtonOpaque(boolean makeOpaque) {
-        if(null != iivSlideLeftFwg.getIcon()) {
+        if (null != iivSlideLeftFwg.getIcon()) {
             iivSlideLeftFwg.getIcon().setAlpha(makeOpaque ? 80 : 200);
         }
     }
+    //TODO://by going back u dont calculate the fact that the next word could be your last
 
     private void swapLayout(boolean isEndOfModule) {
         itvNoWordsMlf.setVisibility(isEndOfModule ? View.VISIBLE : View.GONE);
@@ -196,6 +209,9 @@ public class WordGuessFragment extends Fragment {
         tvDestinationWordFwg.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
         ivCurtainOfWordFwg.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
         btDisplayWordFwg.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
+        iivSlideLeftFwg.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
+        iivSlideRightFwg.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
+        clAddWordToModuleMockLayoutLibi.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
     }
 
     private void displayNextWord(String iterationWord) {
@@ -203,7 +219,14 @@ public class WordGuessFragment extends Fragment {
         currentWordPosition = activity.sourcePairList.indexOf(iterationWord);
         activity.sessionVocabulary.removeWord(iterationWord);
         //activity.getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, passCurrentPositionFragment()).commit();
-        updateLayoutWithText();
+        updateLayoutWithText(true);
+    }
+
+    private void displayNextWord() {
+        timesFailedGetTranslation = 0;
+        currentWordPosition++;
+        activity.sessionVocabulary.removeWord(activity.sourcePairList.get(currentWordPosition));
+        updateLayoutWithText(true);
     }
 
     private void resetCurrentModule() {
@@ -213,9 +236,11 @@ public class WordGuessFragment extends Fragment {
         currentWordPosition = 0;
         //activity.getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, passCurrentPositionFragment()).commit();
         swapLayout(false);
-        updateLayoutWithText();
+        makePreviousButtonOpaque(true);
+        updateLayoutWithText(true);
     }
 
+    //TODO: either make FIFO list to track down which module to display or go back to module list
     private void nextModule() {
         getWordListFromDB(moduleStringList.get(moduleStringList.size() - 2 >= nextModulePosition ? nextModulePosition : 0));
         activity.sessionVocabulary = new Vocabulary(wordList);
@@ -226,14 +251,16 @@ public class WordGuessFragment extends Fragment {
     private void moduleCall() {
         final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
         if (NO_WORD_IN_LIST.equals(iterationWord)) {
-            activity.displayDialog("Error", getResources().getString(R.string.popup_no_word_inside_exists), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+            activity.startTransition(false);
+            activity.displayDialog("Error", getResources().getString(R.string.popup_word_missspell_warning), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         } else {
             if (activity.isNetworkAvailable()) {
-                if (View.VISIBLE != pbProgressBarFwg.getVisibility()) {
-                    pbProgressBarFwg.setVisibility(View.VISIBLE);
+                if (!activity.isProgressBarVisible()) {
+                    activity.startTransition(true);
                 }
                 makeModuleCall(iterationWord);
             } else {
+                activity.startTransition(false);
                 activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             }
         }
@@ -246,7 +273,6 @@ public class WordGuessFragment extends Fragment {
             call.enqueue(new Callback<BaseResponse>() {
                 @Override
                 public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                    pbProgressBarFwg.setVisibility(View.GONE);
                     if (response.isSuccessful()) {
                         //activity.sourcePairList.remove(0);
                         //activity.translationPairList.remove(0);
@@ -256,34 +282,39 @@ public class WordGuessFragment extends Fragment {
                             activity.sessionVocabulary.removeWord(iterationWord);
                             if (5 == timesFailedGetTranslation) {
                                 //display refresh message
+                                activity.startTransition(false);
                                 activity.displayDialog("Error", getResources().getString(R.string.popup_fail_cannot_get_translation), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                             } else {
                                 moduleCall();
                             }
                         } else {
                             timesFailedGetTranslation = 0;
-
-                            /*activity.sourcePairList.add(iterationWord);
-                            activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
-                            activity.sessionVocabulary.removeWord(iterationWord);*/
+                            activity.startTransition(false);
                             activity.prepareDisplayLists(true, iterationWord, response.body().getData().get(0).getJapanese().get(0).getReading());
-                            //activity.currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
-                            if (nextModulePosition + 1 > moduleStringList.size() - 1) {
+                            /*if (nextModulePosition + 1 > moduleStringList.size() - 1) {
                                 nextModulePosition = 0;
-                            }
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, prepareFragment(nextModulePosition), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
+                            }*/
+                            //TODO: detach attach fragment instead of making transaction
+                            Fragment wordGuessFragment = getActivity().getSupportFragmentManager().findFragmentById(fragmentContainerId);
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .detach(wordGuessFragment)
+                                    .attach(wordGuessFragment)
+                                    .commit();
+                            nextModulePosition++;
+                            //getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, prepareFragment(nextModulePosition), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
                         }
                     } else {
                         //onClickMoveToNextWord();
-                        activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                        activity.startTransition(false);
+                        activity.displayDialog("Error", getResources().getString(R.string.popup_no_translation_retrieved), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<BaseResponse> call, Throwable t) {
                     //something wrong with internet
-                    pbProgressBarFwg.setVisibility(View.GONE);
-                    activity.displayDialog("Error", "DIDNT get translation. Refresh", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                    activity.startTransition(false);
+                    activity.displayDialog("Error", getResources().getString(R.string.popup_no_translation_retrieved_fail_response), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                 }
             });
 
@@ -295,7 +326,7 @@ public class WordGuessFragment extends Fragment {
 
     private void makeCallForNextWord(String iterationWord) {
         if (activity.isNetworkAvailable()) {
-            pbProgressBarFwg.setVisibility(View.VISIBLE);
+            activity.startTransition(true);
 
             final APIInterface apiInterface = JsonGetter.buildService(APIInterface.class);
             Call<BaseResponse> call = apiInterface.getWordTranslation(iterationWord);
@@ -304,7 +335,7 @@ public class WordGuessFragment extends Fragment {
                 call.enqueue(new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                        pbProgressBarFwg.setVisibility(View.GONE);
+                        activity.startTransition(false);
                         if (response.isSuccessful()/*MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()*/) {
                             //activity.sourcePairList.remove(0);
                             //activity.translationPairList.remove(0);
@@ -330,7 +361,7 @@ public class WordGuessFragment extends Fragment {
                                 currentWordPosition++;
 
                                 //getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, passCurrentPositionFragment()).addToBackStack("WORD_GUESS_FROM_MENU").commit();
-                                updateLayoutWithText();
+                                updateLayoutWithText(true);
                             }
                         } else {
                             //TODO: handle fail response
@@ -342,8 +373,8 @@ public class WordGuessFragment extends Fragment {
                     @Override
                     public void onFailure(Call<BaseResponse> call, Throwable t) {
                         //something wrong with internet
-                        pbProgressBarFwg.setVisibility(View.GONE);
-                        activity.displayDialog("Error", "DIDNT get translation. Refresh", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                        activity.startTransition(false);
+                        activity.displayDialog("Error", getResources().getString(R.string.popup_no_translation_retrieved_fail_response), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                     }
                 });
 
@@ -364,17 +395,20 @@ public class WordGuessFragment extends Fragment {
         return fragment;
     }
 
-    private void updateLayoutWithText() {
-        //DONE: Make animation and show text
-        //TODO: next fragment do it with swipe (no button)
-        animationSource = YoYo.with(Techniques.FadeOutLeft)
+    private void updateLayoutWithText(boolean isTransitioningToNextWord) {
+        final Techniques transitionFirstPart = isTransitioningToNextWord ? Techniques.FadeOutLeft : Techniques.FadeOutRight;
+        final Techniques transitionSecondPart = isTransitioningToNextWord ? Techniques.FadeInRight : Techniques.FadeInLeft;
+
+        btDisplayWordFwg.setOnClickListener(curtainOnClickListener);
+
+        animationSource = YoYo.with(transitionFirstPart)
                 .duration(500)
                 .withListener(new CustomAnimatorListener() {
                     @Override
                     public void onAnimationEnd(Animator animator) {
                         if (!activity.translationPairList.isEmpty()) {
                             tvSourceWordFwg.setText(activity.sourcePairList.get(currentWordPosition));
-                            YoYo.with(Techniques.FadeInRight)
+                            YoYo.with(transitionSecondPart)
                                     .duration(500)
                                     .playOn(tvSourceWordFwg);
                         }
@@ -382,35 +416,27 @@ public class WordGuessFragment extends Fragment {
                 })
                 .playOn(tvSourceWordFwg);
 
-        animationCurtain = YoYo.with(Techniques.FadeInRight)
+        animationCurtain = YoYo.with(transitionSecondPart)
                 .duration(1000)
                 .playOn(ivCurtainOfWordFwg);
 
-        animationDestination = YoYo.with(Techniques.FadeOutLeft)
+        animationDestination = YoYo.with(transitionFirstPart)
                 .duration(500)
                 .withListener(new CustomAnimatorListener() {
                     @Override
                     public void onAnimationEnd(Animator animator) {
                         if (!activity.translationPairList.isEmpty()) {
                             tvDestinationWordFwg.setText(activity.translationPairList.get(currentWordPosition));
-                            YoYo.with(Techniques.FadeInRight)
+                            YoYo.with(transitionSecondPart)
                                     .duration(500)
                                     .playOn(tvDestinationWordFwg);
                         } else {
+                            //Update: this is handled now, ill keep it if i need to change logic
                             //display that there is no word available. should refresh (this can go either here or on the source if^^^ it is the same
                         }
                     }
                 })
                 .playOn(tvDestinationWordFwg);
-    }
-
-    private void initializeTextViews() {
-        if (!activity.translationPairList.isEmpty()) {
-            tvSourceWordFwg.setText(activity.sourcePairList.get(currentWordPosition));
-            tvDestinationWordFwg.setText(activity.translationPairList.get(currentWordPosition));
-        } else {
-            //display that there is no word available. should refresh
-        }
     }
 
     private void setModuleList() {
@@ -445,14 +471,14 @@ public class WordGuessFragment extends Fragment {
         if (clickedOption == moduleStringList.size() - 1) {
             //create module
             AtomicBoolean moduleExists = new AtomicBoolean(false);
-            moduleName = "New Module" + ThreadLocalRandom.current().nextInt(1, 700);
+            moduleName = makeNewModuleName();
             new Thread(() -> {
                 try {
-                    //TODO: improve naming validation
                     if (activity.DBInstance.wordDao().checkIfDuplicate(moduleName)) {
                         moduleExists.set(true);
                     } else {
-                        activity.DBInstance.wordDao().insertAllModule(Collections.singletonList(new Word(activity.wordToBeAddedToModule, moduleName)));
+                        activity.DBInstance.wordDao().insertAllModule(Collections.singletonList(new Word(wordToBeAddedToModule, moduleName)));
+                        setModuleList();
                         activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
                     }
                 } catch (Exception e) {
@@ -462,7 +488,7 @@ public class WordGuessFragment extends Fragment {
                         if (moduleExists.get()) {
                             activity.displayDialog("Oops", getResources().getString(R.string.popup_no_module_name_exists), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
                         } else {
-                            //display message for succesfully adding the word to modules
+                            activity.displaySnackBar(getResources().getString(R.string.snackbar_added_word_in_modules_success, wordToBeAddedToModule, moduleName ), Snackbar.LENGTH_LONG);
                         }
                     });
                 }
@@ -472,13 +498,13 @@ public class WordGuessFragment extends Fragment {
             moduleName = moduleStringList.get(clickedOption);
             new Thread(() -> {
                 try {
-                    activity.DBInstance.wordDao().insertAllModule(Collections.singletonList(new Word(activity.wordToBeAddedToModule, moduleName)));
+                    activity.DBInstance.wordDao().insertAllModule(Collections.singletonList(new Word(wordToBeAddedToModule, moduleName)));
                     activity.displaySnackBar(getResources().getString(R.string.snackbar_create_module_success), Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     getActivity().runOnUiThread(() -> {
-                        //display message for succesfully adding the word to modules
+                        activity.displaySnackBar(getResources().getString(R.string.snackbar_added_word_in_modules_success, wordToBeAddedToModule, moduleName ), Snackbar.LENGTH_LONG);
                     });
                 }
             }).start();
@@ -512,5 +538,22 @@ public class WordGuessFragment extends Fragment {
         return wordList.stream()
                 .map(item -> item.getWord())
                 .collect(Collectors.toList());
+    }
+
+    private String makeNewModuleName() {
+        int newModuleNumber = 1;
+        boolean foundSameName;
+        do {
+            foundSameName = false;
+            for (String moduleNameItem : moduleStringList) {
+                if (moduleNameItem.equals("New Module " + newModuleNumber)) {
+                    newModuleNumber++;
+                    foundSameName = true;
+                    break;
+                }
+            }
+        } while (foundSameName);
+
+        return "New Module " + newModuleNumber;
     }
 }

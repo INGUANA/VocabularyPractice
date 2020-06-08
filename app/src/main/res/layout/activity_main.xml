@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <com.github.rahatarmanahmed.cpv.CircularProgressView
+        android:id="@+id/pbProgressBarMa"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:elevation="5dp"
+        android:visibility="gone"
+        app:cpv_animAutostart="true"
+        app:cpv_indeterminate="true"
+        android:layout_gravity="center"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

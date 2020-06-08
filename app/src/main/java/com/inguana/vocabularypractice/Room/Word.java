@@ -6,13 +6,13 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(primaryKeys = {"word", "module_name"})
 public class Word {
     @NonNull
-    @PrimaryKey
     @ColumnInfo(name = "word")
     public String word;
 
+    @NonNull
     @ColumnInfo(name = "module_name")
     public String module_name;
 

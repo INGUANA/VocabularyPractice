@@ -39,9 +39,7 @@ public class CreateModuleFragment extends Fragment {
     private int fragmentContainerId;
 
     private TextView itvModuleTitleCmf;
-    private Dialog overlayDialog;
     private MainActivity activity;
-    private CircularProgressView pbProgressBarMmf;
     private RecyclerView rvWordListCmf;
     private ViewGroup clCreateUpdateMockLayoutLibi;
     private LinearLayoutManager layoutManager;
@@ -55,10 +53,6 @@ public class CreateModuleFragment extends Fragment {
     public void initialize(View view, ViewGroup container) {
         fragmentContainerId = container.getId();
 
-        overlayDialog = new Dialog(getContext(), R.style.Theme_AppCompat_Dialog_Transparent);
-        overlayDialog.setCancelable(true);
-
-        pbProgressBarMmf = view.findViewById(R.id.pbProgressBarMmf);
         rvWordListCmf = view.findViewById(R.id.rvWordListCmf);
         iivCreateUpdateNewModuleIconLibi = view.findViewById(R.id.iivButtonIconLibi);
         itvModuleTitleCmf = view.findViewById(R.id.itvModuleTitleCmf);

@@ -41,12 +41,10 @@ public class MainMenuFragment extends Fragment {
     private Button btStartMmf, btSettingsMmf, btModuleListMmf;
     private ImageButton ibSettingsInformationMmf;
     private TranslationMode translationMode;
-    private TextView tvTooltipTextMmf;
-    private Dialog overlayDialog;
+    //private TextView tvTooltipTextMmf;
     private StorageReference mStorageRef;
     private MainActivity activity;
     private Task firebaseTask;
-    private CircularProgressView pbProgressBarMmf;
 
     private static final String VOCABULARY_WORDS_PATH = "google-10000-english.txt";
     //private static final String VOCABULARY_WORDS_URI = "gs://vocabularypractice-dae13.appspot.com/google-10000-english.txt";
@@ -57,7 +55,7 @@ public class MainMenuFragment extends Fragment {
         btSettingsMmf = view.findViewById(R.id.btSettingsMmf);
         btModuleListMmf = view.findViewById(R.id.btModuleListMmf);
 
-        tvTooltipTextMmf = view.findViewById(R.id.tvTooltipTextMmf);
+        //tvTooltipTextMmf = view.findViewById(R.id.tvTooltipTextMmf);
 
         ibSettingsInformationMmf = view.findViewById(R.id.ibSettingsInformationMmf);
 
@@ -65,12 +63,7 @@ public class MainMenuFragment extends Fragment {
 
         fragmentContainerId = container.getId();
 
-        overlayDialog = new Dialog(getContext(), R.style.Theme_AppCompat_Dialog_Transparent);
-        overlayDialog.setCancelable(true);
-
         mStorageRef = FirebaseStorage.getInstance().getReference();
-
-        pbProgressBarMmf = view.findViewById(R.id.pbProgressBarMmf);
 
         activity = ((MainActivity) getActivity());
     }
@@ -99,7 +92,7 @@ public class MainMenuFragment extends Fragment {
 
         ibSettingsInformationMmf.setOnClickListener(v -> onClickViewToolTip());
 
-        overlayDialog.setOnCancelListener(dialog -> closeToolTip());
+        //overlayDialog.setOnCancelListener(dialog -> closeToolTip());
 
         return view;
     }
@@ -111,7 +104,7 @@ public class MainMenuFragment extends Fragment {
         MainMenuFragment mainMenuFragment = new MainMenuFragment();
         mainMenuFragment.setArguments(startButtonBundle);
 
-        pbProgressBarMmf.setVisibility(View.VISIBLE);
+        activity.startTransition(true);
 
         final File checkFileInstance = new File(getContext().getFilesDir(),"vocabulary.txt");
         if (checkFileInstance.exists()) {
@@ -152,19 +145,19 @@ public class MainMenuFragment extends Fragment {
             firebaseTask.addOnFailureListener(exception -> {
                 // Handle failed download
                 vocabularyFirebaseRef.delete();
-                pbProgressBarMmf.setVisibility(View.GONE);
+                activity.startTransition(false);
             });
         } else {
-            pbProgressBarMmf.setVisibility(View.GONE);
+            activity.startTransition(false);
             activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         }
     }
 
     private void getTranslationRequest() { //do 5 calls and get the results into the array
-
         new Thread(() -> {
             try {
-
+                //TODO: need to change the way i handle the 5 consecutive calls since it is transitioning but i set it to false.
+                activity.clearDisplayLists();
                 for (int i = 0; 5 > i; i++) {
                     String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
                     Call<BaseResponse> call = activity.apiInterface.getWordTranslation(iterationWord);
@@ -172,13 +165,9 @@ public class MainMenuFragment extends Fragment {
                     try {
                         Response<BaseResponse> response = call.execute(
                         );
-                        if (response.isSuccessful()/*MainActivity.APICode.SUCCESS.getCode() == response.body().getCode()*/) {
+                        if (response.isSuccessful()) {
                             if(!response.body().getData().get(0).getJapanese().get(0).getReading().isEmpty()) {
-                                //TODO:
-                                activity.prepareDisplayLists(true, iterationWord, response.body().getData().get(0).getJapanese().get(0).getReading());
-                                /*activity.sourcePairList.add(iterationWord);
-                                activity.translationPairList.add(response.body().getData().get(0).getJapanese().get(0).getReading());
-                                activity.sessionVocabulary.removeWord(iterationWord);*/
+                                activity.prepareDisplayLists(false, iterationWord, response.body().getData().get(0).getJapanese().get(0).getReading());
                             }
                         }
                     } catch (IOException e) {
@@ -191,12 +180,12 @@ public class MainMenuFragment extends Fragment {
                 getActivity().runOnUiThread(() -> {
                     //TODO:   3. Deal with trash word
                     //if there is at least one word -> go into the next fragment
-                    pbProgressBarMmf.setVisibility(View.GONE);
+                    activity.startTransition(false);
                     if (!activity.translationPairList.isEmpty()) {
                         activity.currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
                         getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new WordGuessFragment(), WORD_GUESS_FRAGMENT_TAG).addToBackStack("WORD_GUESS_FROM_MENU").commit();
                     } else {
-                        activity.displayDialog("Error", "DIDNT get translation", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                        activity.displayDialog("Error", getResources().getString(R.string.popup_no_translation_retrieved), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
                     }
                 });
             }
@@ -217,15 +206,16 @@ public class MainMenuFragment extends Fragment {
     }
 
     private void onClickViewToolTip() {
-        if (View.VISIBLE != tvTooltipTextMmf.getVisibility()) {
+        /*if (View.VISIBLE != tvTooltipTextMmf.getVisibility()) {
             tvTooltipTextMmf.setVisibility(View.VISIBLE);
             overlayDialog.show();
-        }
+        }*/
+        activity.displayDialog("*Future Release*", getResources().getString(R.string.fragment_main_menu_tooltip_text_settings), R.drawable.pdlg_icon_info, R.color.pdlg_color_blue);
     }
 
-    private void closeToolTip() {
+    /*private void closeToolTip() {
         if (View.VISIBLE == tvTooltipTextMmf.getVisibility()) {
             tvTooltipTextMmf.setVisibility(View.GONE);
         }
-    }
+    }*/
 }

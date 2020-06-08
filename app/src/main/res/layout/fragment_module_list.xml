@@ -4,20 +4,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.github.rahatarmanahmed.cpv.CircularProgressView
-        android:id="@+id/pbProgressBarMlf"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        android:elevation="5dp"
-        android:visibility="gone"
-        app:cpv_animAutostart="true"
-        app:cpv_indeterminate="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <TextView
         android:id="@+id/tvInstructionsMlf"
         style="@style/HeaderInfoTextStyle"

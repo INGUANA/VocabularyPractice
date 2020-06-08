@@ -22,14 +22,13 @@
 
     <string name="fragment_module_list_edit_module">Edit\nModule</string>
     <string name="fragment_module_list_delete_module">Delete\nModule</string>
-    <string name="fragment_module_list_info">Long press for more options</string>
+    <string name="fragment_module_list_info">Click on module to start practice.\nLong press for more options.</string>
     <string name="fragment_module_list_no_modules">No modules yet.</string>
 
     <string name="fragment_module_list_module">New\nModule</string>
 
     <string name="popup_empty_title">Type the new module\'s name to create it.</string>
     <string name="popup_no_internet">No internet available.</string>
-    <string name="popup_no_translation">DIDNT get translation. Refresh</string>
     <string name="popup_io_firebase_file_error">Something went wrong with files.</string>
     <string name="popup_no_module_name_exists">Module name already exists. Please choose a different name or edit the existing one.</string>
     <string name="popup_no_word_inside_exists">You haven\'t set any words to this module yet!</string>
@@ -37,11 +36,18 @@
     <string name="popup_delete_button">Delete</string>
     <string name="popup_cancel_button">Cancel</string>
     <string name="popup_fail_cannot_get_translation">Trouble getting translations, please try the next word.</string>
+    <string name="popup_information_language_settings">Select which language the known word is from, and to what language you will be trying to translate it.</string>
+    <string name="popup_no_translation_retrieved">Could not get translation, check internet connectivity and retry.</string>
+    <string name="popup_no_translation_retrieved_fail_response">Could not get translation, check internet connectivity and retry.</string>
+    <string name="popup_word_missspell_warning">There is a word that is misspelled, or could not get translated.</string>
+
 
 
     <string name="snackbar_create_module_success">New Module created successfully!</string>
     <string name="snackbar_edit_module_success">Module has been updated!</string>
     <string name="snackbar_delete_module_success">Module has been deleted.</string>
+    <string name="snackbar_added_word_in_modules_success">Word \'%1$s\'has been added to \'%2$s\' Module!</string>
+
 
 
 
