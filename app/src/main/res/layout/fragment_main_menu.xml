@@ -4,11 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <VideoView
+        android:id="@+id/vvBackgroundMmf"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <Button
         android:id="@+id/btStartMmf"
         android:layout_width="@dimen/button_width"
         android:layout_height="@dimen/button_height"
         android:text="@string/fragment_main_menu_start"
+        android:background="@drawable/button_icon"
         app:layout_constraintBottom_toTopOf="@+id/btSettingsMmf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,6 +29,8 @@
         android:text="@string/fragment_main_menu_english_to_japanese"
         android:clickable="false"
         android:enabled="false"
+        android:background="@drawable/button_icon_submerged"
+        android:alpha="0.5"
         app:layout_constraintBottom_toTopOf="@+id/btModuleListMmf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +42,7 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="@dimen/margin_top_button"
         android:text="@string/fragment_main_menu_create_module"
+        android:background="@drawable/button_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +64,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="@dimen/margin_start"
         android:background="@drawable/pdlg_icon_info"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/aquamarine"
         app:layout_constraintTop_toTopOf="@id/btSettingsMmf"
         app:layout_constraintBottom_toBottomOf="@id/btSettingsMmf"
         app:layout_constraintStart_toEndOf="@id/btSettingsMmf"/>

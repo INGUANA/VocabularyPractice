@@ -8,6 +8,8 @@
     <dimen name="button_width">200dp</dimen>
     <dimen name="button_width_small">47dp</dimen>
     <dimen name="button_width_medium">100dp</dimen>
+    <dimen name="button_width_medium_small">110dp</dimen>
+
 
     <!--Button Heights-->
     <dimen name="button_height_small">47dp</dimen>
@@ -50,6 +52,10 @@
     <dimen name="text_size_average_medium_small">17dp</dimen>
     <dimen name="text_size_average_medium">21dp</dimen>
     <dimen name="text_size_average_xmedium">26dp</dimen>
+
+    <!--Paddings-->
+    <dimen name="padding_start">20dp</dimen>
+    <dimen name="padding_end">20dp</dimen>
 
 
 </resources>

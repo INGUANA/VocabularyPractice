@@ -13,6 +13,7 @@
         android:layout_width="@dimen/box_width"
         android:layout_height="0dp"
         android:layout_marginEnd="@dimen/margin_end_small"
+        android:tint="@color/mardi_grass"
         app:layout_constraintBottom_toBottomOf="@+id/itvTextButtonIconLibi"
         app:layout_constraintEnd_toStartOf="@id/itvTextButtonIconLibi"
         app:layout_constraintTop_toTopOf="@id/itvTextButtonIconLibi" />

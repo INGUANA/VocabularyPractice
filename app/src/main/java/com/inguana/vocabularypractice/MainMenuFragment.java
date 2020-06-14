@@ -1,13 +1,19 @@
 package com.inguana.vocabularypractice;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +51,7 @@ public class MainMenuFragment extends Fragment {
     private StorageReference mStorageRef;
     private MainActivity activity;
     private Task firebaseTask;
+    private VideoView vvBackgroundMmf;
 
     private static final String VOCABULARY_WORDS_PATH = "google-10000-english.txt";
     //private static final String VOCABULARY_WORDS_URI = "gs://vocabularypractice-dae13.appspot.com/google-10000-english.txt";
@@ -58,6 +65,7 @@ public class MainMenuFragment extends Fragment {
         //tvTooltipTextMmf = view.findViewById(R.id.tvTooltipTextMmf);
 
         ibSettingsInformationMmf = view.findViewById(R.id.ibSettingsInformationMmf);
+        vvBackgroundMmf = view.findViewById(R.id.vvBackgroundMmf);
 
         translationMode = TranslationMode.EnglishToJapanese;
 
@@ -75,6 +83,16 @@ public class MainMenuFragment extends Fragment {
 
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,7 +105,9 @@ public class MainMenuFragment extends Fragment {
 
         btModuleListMmf.setOnClickListener(view13 -> {
             activity.currentMainFragment = MODULE_LIST_FRAGMENT_TAG;
-            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new ModuleListFragment(), MODULE_LIST_FRAGMENT_TAG).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction().setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
+                    .replace(fragmentContainerId, new ModuleListFragment(), MODULE_LIST_FRAGMENT_TAG).addToBackStack(null).commit();
         });
 
         ibSettingsInformationMmf.setOnClickListener(v -> onClickViewToolTip());
@@ -95,6 +115,68 @@ public class MainMenuFragment extends Fragment {
         //overlayDialog.setOnCancelListener(dialog -> closeToolTip());
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            vvBackgroundMmf.pause();
+        }
+    }
+
+    /*@Nullable
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        Animation result;
+        if (nextAnim == 0) {
+            result =  super.onCreateAnimation(transit, enter, nextAnim);
+        } else {
+            result = android.view.animation.AnimationUtils.loadAnimation(getContext(), nextAnim);
+            result.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    // Do any process intensive work that can wait until after fragment has loaded
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+        }
+        return result;
+    }*/
+
+    private void initializePlayer() {
+        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.main_menu_screen_loop);
+        vvBackgroundMmf.setVideoURI(uri);
+        vvBackgroundMmf.start();
+        vvBackgroundMmf.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setLooping(true);
+            }
+        });
+    }
+
+    private void releasePlayer() {
+        vvBackgroundMmf.stopPlayback();
     }
 
     private void onClickStartWordGuess() {

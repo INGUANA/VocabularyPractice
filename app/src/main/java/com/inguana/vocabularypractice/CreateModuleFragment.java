@@ -86,7 +86,7 @@ public class CreateModuleFragment extends Fragment {
         recyclerViewArrayAdapter = new WordRecyclerViewArrayAdapter(wordList, getContext());//new ArrayList<>(Arrays.asList("")). Collections.singletonList("")) produces immutable list so i cant add additional element if i wanted to
         rvWordListCmf.setAdapter(recyclerViewArrayAdapter);
 
-        addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
+        //addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         iivCreateUpdateNewModuleIconLibi.setIcon(addNewWordIcon);
 
         return view;

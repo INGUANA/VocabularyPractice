@@ -124,14 +124,12 @@ public class WordGuessFragment extends Fragment {
 
         itvAddToModuleLibi.setText(getResources().getString(R.string.fragment_word_guess_add_to_module));
         IconicsDrawable addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_playlist_add);
-        addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
+        //addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         iivAddToModuleLibi.setIcon(addNewWordIcon);
 
         addNewWordIcon = new IconicsDrawable(getContext(), CommunityMaterial.Icon.cmd_chevron_double_right);
         addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         addNewWordIcon.setAlpha(200);
-        /*addNewWordIcon.sizeDpY(80);
-        addNewWordIcon.sizeDpX(100);*/
         iivSlideRightFwg.setIcon(addNewWordIcon);
 
         addNewWordIcon = new IconicsDrawable(getContext(), CommunityMaterial.Icon.cmd_chevron_double_left);

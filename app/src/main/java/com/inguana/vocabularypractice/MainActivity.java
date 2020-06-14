@@ -172,6 +172,12 @@ public class MainActivity extends AppCompatActivity {
     //TODO: investigate why it behaves weird whne push notification from other app appears
     //TODO: bundle same code to be written one time only (example when you go to word guess, you have to do several things to join)
     //TODO: module word calling in wordguess is the same as in module list. place calls in the DAO (they require bundling)
+
+    //Layout
+    //TODO: Button pressing should be better
+    //TODO: progressbar alteration
+    //TODO: AAE App intro + particles
+    //TODO: background color depending on the fragment and intent the user has?
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(IconicsContextWrapper.wrap(newBase));

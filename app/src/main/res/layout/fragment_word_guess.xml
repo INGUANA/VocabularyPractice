@@ -34,6 +34,7 @@
         android:text="@string/fragment_word_guess_redo"
         android:textAllCaps="false"
         android:visibility="gone"
+        android:background="@drawable/button_icon"
         app:layout_constraintEnd_toEndOf="@id/itvNoWordsMlf"
         app:layout_constraintStart_toStartOf="@id/itvNoWordsMlf"
         app:layout_constraintTop_toBottomOf="@id/itvNoWordsMlf" />
@@ -46,13 +47,14 @@
         android:text="@string/fragment_word_guess_choose_module"
         android:textAllCaps="false"
         android:visibility="gone"
+        android:background="@drawable/button_icon"
         app:layout_constraintEnd_toEndOf="@id/btRedoFwg"
         app:layout_constraintStart_toStartOf="@id/btRedoFwg"
         app:layout_constraintTop_toBottomOf="@id/btRedoFwg" />
 
     <TextView
         android:id="@+id/tvSourceWordFwg"
-        style="@style/MenuButtonTextStyle"
+        style="@style/WordGuessTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="adsfadfasdfasdfasdf"
@@ -65,7 +67,7 @@
         android:id="@+id/vLineSeparatorFwg"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/pdlg_color_black"
+        android:background="@color/celeste_opaque"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,13 +77,14 @@
         android:layout_height="50dp"
         android:text="@string/fragment_word_guess_move_next_word"
         android:textAllCaps="false"
+        android:background="@drawable/button_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/vLineSeparatorFwg"
         app:layout_constraintStart_toStartOf="@id/vLineSeparatorFwg" />
 
     <TextView
         android:id="@+id/tvDestinationWordFwg"
-        style="@style/MenuButtonTextStyle"
+        style="@style/WordGuessTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="adsfadfasdfasdfasdf"
@@ -94,7 +97,7 @@
         android:id="@+id/ivCurtainOfWordFwg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/green_sheen"
         android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -131,10 +134,11 @@
 
     <Button
         android:id="@+id/btDisplayWordFwg"
-        android:layout_width="@dimen/button_width_medium"
-        android:layout_height="@dimen/button_height_medium"
+        android:layout_width="@dimen/button_width_medium_small"
+        android:layout_height="@dimen/button_height"
         android:text="@string/fragment_word_guess_see_translation"
         android:textAllCaps="false"
+        android:background="@drawable/button_icon"
         app:layout_constraintBottom_toBottomOf="@id/vLineSeparatorFwg"
         app:layout_constraintEnd_toEndOf="@id/vLineSeparatorFwg"
         app:layout_constraintStart_toStartOf="@id/vLineSeparatorFwg"
