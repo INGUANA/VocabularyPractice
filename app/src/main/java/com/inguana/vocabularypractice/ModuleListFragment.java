@@ -11,11 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.snackbar.Snackbar;
 import com.inguana.vocabularypractice.CustomExtensions.ModuleRecyclerViewArrayAdapter;
 import com.inguana.vocabularypractice.Room.Word;
@@ -38,7 +37,7 @@ import static com.inguana.vocabularypractice.MainActivity.CREATE_MODULE_FRAGMENT
 import static com.inguana.vocabularypractice.MainActivity.WORD_GUESS_FRAGMENT_TAG;
 import static com.inguana.vocabularypractice.Vocabulary.NO_WORD_IN_LIST;
 
-public class ModuleListFragment extends Fragment implements ModuleRecyclerViewArrayAdapter.OnModuleClickListener {
+public class ModuleListFragment extends BaseFragment implements ModuleRecyclerViewArrayAdapter.OnModuleClickListener {
 
     private int fragmentContainerId;
 
@@ -76,13 +75,16 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
         layoutManager = new LinearLayoutManager(getContext());
         rvModuleListMlf.setLayoutManager(layoutManager);
 
-        IconicsDrawable addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_add);
+        IconicsDrawable addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_library_add);
         addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         iivNewModuleIconMlf.setIcon(addNewWordIcon);
 
         clNewModuleMlf.setOnClickListener(view1 -> {
             activity.currentMainFragment = CREATE_MODULE_FRAGMENT_TAG;
-            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, new CreateModuleFragment(), CREATE_MODULE_FRAGMENT_TAG).addToBackStack(null).commit();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                    .replace(fragmentContainerId, new CreateModuleFragment(), CREATE_MODULE_FRAGMENT_TAG).addToBackStack(null).commit();
         });
 
         setModuleList();
@@ -121,8 +123,10 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
                 //activity.displaySnackBar("Clicked Edit option", Snackbar.LENGTH_SHORT);
                 activity.currentMainFragment = CREATE_MODULE_FRAGMENT_TAG;
 
-                activity.getSupportFragmentManager().beginTransaction().replace(fragmentContainerId,
-                        prepareFragment(recyclerViewArrayAdapter.getItem(clickedItemPosition))).addToBackStack(null).commit();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .replace(fragmentContainerId, prepareFragment(recyclerViewArrayAdapter.getItem(clickedItemPosition))).addToBackStack(null).commit();
                 break;
             }
             case 1: {
@@ -203,6 +207,7 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
     private void moduleCall(int positionClicked) {
         final String iterationWord = activity.sessionVocabulary.getRandomVocabularyWord();
         if (NO_WORD_IN_LIST.equals(iterationWord)) {
+            activity.startTransition(false);
             activity.displayDialog("Error", getResources().getString(R.string.popup_word_missspell_warning), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         } else {
             if (activity.isNetworkAvailable()) {
@@ -211,7 +216,7 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
                 }
                 makeModuleCall(iterationWord, positionClicked);
             } else {
-                activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                activity.displayDialog("Error", getResources().getString(R.string.popup_no_internet), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             }
         }
     }
@@ -245,7 +250,10 @@ public class ModuleListFragment extends Fragment implements ModuleRecyclerViewAr
                             activity.sessionVocabulary.removeWord(iterationWord);*/
                             activity.prepareDisplayLists(true, iterationWord, response.body().getData().get(0).getJapanese().get(0).getReading());
                             //activity.currentMainFragment = WORD_GUESS_FRAGMENT_TAG;
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(fragmentContainerId, prepareFragment(positionClicked), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
+                            getActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                                    .replace(fragmentContainerId, prepareFragment(positionClicked), WORD_GUESS_FRAGMENT_TAG).addToBackStack(null).commit();
                         }
                     } else {
                         activity.startTransition(false);

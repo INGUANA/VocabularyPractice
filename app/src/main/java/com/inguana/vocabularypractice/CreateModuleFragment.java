@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 import static com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter.ADD_BUTTON_NAME_INDICATOR;
 
-public class CreateModuleFragment extends Fragment {
+public class CreateModuleFragment extends BaseFragment {
 
     public enum TranslationMode {
         JapaneseToEnglish, EnglishToJapanese;

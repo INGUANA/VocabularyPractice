@@ -10,9 +10,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/fragment_module_list_info"
+        android:padding="@dimen/padding_tiny"
         android:layout_marginTop="@dimen/margin_top_button"
-        android:layout_marginEnd="@dimen/margin_end"
-        android:layout_marginStart="@dimen/margin_start"
+        android:background="@color/bali_hai"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -20,7 +20,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvModuleListMlf"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="@dimen/box_height_medium_small"
         android:layout_marginTop="@dimen/margin_top_layout"
         android:scrollbars="vertical"
         android:layout_marginStart="@dimen/margin_start"

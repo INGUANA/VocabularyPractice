@@ -9,7 +9,7 @@
         android:layout_width="0dp"
         style="@style/RecyclerViewTextStyle"
         android:layout_height="@dimen/button_height_small"
-        android:background="@drawable/recycler_view_item_icon"
+        android:background="@drawable/recycler_view_item_module_icon"
         android:gravity="center_vertical"
         android:paddingStart="@dimen/padding_start"
         android:paddingEnd="@dimen/padding_end"

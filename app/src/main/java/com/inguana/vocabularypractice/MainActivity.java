@@ -2,16 +2,22 @@ package com.inguana.vocabularypractice;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.VideoView;
 
 import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Dialog overlayDialog;
     private CoordinatorLayout colMainActivityMa;
     private CircularProgressView pbProgressBarMa;
+    private VideoView vvBackgroundMmf;
+    private ImageView iivIntroBackgroundMmf;
     public AppDatabase DBInstance;
     public APIInterface apiInterface;
     public static final String MAIN_MENU_FRAGMENT_TAG = "MAIN_MENU_FRAGMENT";
@@ -63,13 +71,15 @@ public class MainActivity extends AppCompatActivity {
         pbProgressBarMa = findViewById(R.id.pbProgressBarMa);
         overlayDialog = new Dialog(this, R.style.Theme_AppCompat_Dialog_Transparent);
         overlayDialog.setCancelable(true);
+        vvBackgroundMmf = findViewById(R.id.vvBackgroundMmf);
+        iivIntroBackgroundMmf = findViewById(R.id.iivIntroBackgroundMmf);
 
         translationPairList = new ArrayList<>();
         sourcePairList = new ArrayList<>();
         //TODO: check getInstance
         DBInstance = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "Word-Database")
-                .addMigrations(new Migration1To2(1,2))
+                .addMigrations(new Migration1To2(1, 2))
                 .build();
 
         JsonGetter.getRetrofitInstance(); //needs fixing
@@ -79,11 +89,58 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);//TODO: set layout programmatically?
         initialize();
 
         currentMainFragment = MAIN_MENU_FRAGMENT_TAG;
         getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragmentContainerMa, new MainMenuFragment(), currentMainFragment)/*.addToBackStack(null)*/.commit();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            vvBackgroundMmf.pause();
+        }
+    }
+
+    private void initializePlayer() {
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.main_menu_screen_loop);
+        vvBackgroundMmf.setVideoURI(uri);
+        vvBackgroundMmf.start();
+        vvBackgroundMmf.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setLooping(true);
+                mediaPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                    @Override
+                    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                        if (MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START == what) {
+                            iivIntroBackgroundMmf.setVisibility(View.GONE);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+    }
+
+    private void releasePlayer() {
+        vvBackgroundMmf.stopPlayback();
+        iivIntroBackgroundMmf.setVisibility(View.VISIBLE);
     }
 
     public void swapFragment() {
@@ -165,6 +222,12 @@ public class MainActivity extends AppCompatActivity {
     public void clearDisplayLists() {
         sourcePairList = new ArrayList<>();
         translationPairList = new ArrayList<>();
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        view.clearFocus();
     }
 
     //TODO: Handle OnBackPressed to pop fragments correctly

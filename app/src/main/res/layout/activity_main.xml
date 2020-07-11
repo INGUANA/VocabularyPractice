@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundStyle"
     android:id="@+id/colMainActivityMa"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -19,11 +20,18 @@
         app:cpv_indeterminate="true"
         android:layout_gravity="center"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Hello World!" />
+        <VideoView
+            android:id="@+id/vvBackgroundMmf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill"/>
+
+        <ImageView
+            android:id="@+id/iivIntroBackgroundMmf"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/intro_background_main_menu_screen"/>
 
     <FrameLayout
         android:id="@+id/flMainFragmentContainerMa"

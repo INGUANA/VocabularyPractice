@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -32,7 +33,6 @@ import com.mikepenz.iconics.view.IconicsTextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -43,7 +43,7 @@ import retrofit2.Response;
 import static com.inguana.vocabularypractice.MainActivity.WORD_GUESS_FRAGMENT_TAG;
 import static com.inguana.vocabularypractice.Vocabulary.NO_WORD_IN_LIST;
 
-public class WordGuessFragment extends Fragment {
+public class WordGuessFragment extends BaseFragment {
 
     private TextView tvSourceWordFwg, tvDestinationWordFwg;
     private Button btMoveNextWordFwg, btDisplayWordFwg, btRedoFwg, btNextModuleFwg;
@@ -210,6 +210,12 @@ public class WordGuessFragment extends Fragment {
         iivSlideLeftFwg.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
         iivSlideRightFwg.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
         clAddWordToModuleMockLayoutLibi.setVisibility(isEndOfModule ? View.GONE : View.VISIBLE);
+
+        if(isEndOfModule) {
+            tvSourceWordFwg.setText(getResources().getString(R.string.nothing));
+            tvDestinationWordFwg.setText(getResources().getString(R.string.nothing));
+
+        }
     }
 
     private void displayNextWord(String iterationWord) {
@@ -259,7 +265,7 @@ public class WordGuessFragment extends Fragment {
                 makeModuleCall(iterationWord);
             } else {
                 activity.startTransition(false);
-                activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+                activity.displayDialog("Error", getResources().getString(R.string.popup_no_internet), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
             }
         }
     }
@@ -295,6 +301,7 @@ public class WordGuessFragment extends Fragment {
                             //TODO: detach attach fragment instead of making transaction
                             Fragment wordGuessFragment = getActivity().getSupportFragmentManager().findFragmentById(fragmentContainerId);
                             getActivity().getSupportFragmentManager().beginTransaction()
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                                     .detach(wordGuessFragment)
                                     .attach(wordGuessFragment)
                                     .commit();
@@ -380,7 +387,7 @@ public class WordGuessFragment extends Fragment {
                 e.printStackTrace();
             }
         } else {
-            activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+            activity.displayDialog("Error", getResources().getString(R.string.popup_no_internet), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         }
     }
 
@@ -415,7 +422,7 @@ public class WordGuessFragment extends Fragment {
                 .playOn(tvSourceWordFwg);
 
         animationCurtain = YoYo.with(transitionSecondPart)
-                .duration(1000)
+                .duration(900)
                 .playOn(ivCurtainOfWordFwg);
 
         animationDestination = YoYo.with(transitionFirstPart)

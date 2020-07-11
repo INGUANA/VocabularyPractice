@@ -1,31 +1,25 @@
 package com.inguana.vocabularypractice;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.inguana.vocabularypractice.rest.response.BaseResponse;
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +30,7 @@ import retrofit2.Response;
 import static com.inguana.vocabularypractice.MainActivity.MODULE_LIST_FRAGMENT_TAG;
 import static com.inguana.vocabularypractice.MainActivity.WORD_GUESS_FRAGMENT_TAG;
 
-public class MainMenuFragment extends Fragment {
+public class MainMenuFragment extends BaseFragment {
 
     public enum TranslationMode {
         JapaneseToEnglish, EnglishToJapanese;
@@ -77,13 +71,6 @@ public class MainMenuFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-
-    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
@@ -106,77 +93,14 @@ public class MainMenuFragment extends Fragment {
         btModuleListMmf.setOnClickListener(view13 -> {
             activity.currentMainFragment = MODULE_LIST_FRAGMENT_TAG;
             getActivity().getSupportFragmentManager()
-                    .beginTransaction().setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out, android.R.animator.fade_in, android.R.animator.fade_out)
+                    .beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                     .replace(fragmentContainerId, new ModuleListFragment(), MODULE_LIST_FRAGMENT_TAG).addToBackStack(null).commit();
         });
 
         ibSettingsInformationMmf.setOnClickListener(v -> onClickViewToolTip());
 
-        //overlayDialog.setOnCancelListener(dialog -> closeToolTip());
-
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        initializePlayer();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        releasePlayer();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            vvBackgroundMmf.pause();
-        }
-    }
-
-    /*@Nullable
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        Animation result;
-        if (nextAnim == 0) {
-            result =  super.onCreateAnimation(transit, enter, nextAnim);
-        } else {
-            result = android.view.animation.AnimationUtils.loadAnimation(getContext(), nextAnim);
-            result.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    // Do any process intensive work that can wait until after fragment has loaded
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-            });
-        }
-        return result;
-    }*/
-
-    private void initializePlayer() {
-        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.main_menu_screen_loop);
-        vvBackgroundMmf.setVideoURI(uri);
-        vvBackgroundMmf.start();
-        vvBackgroundMmf.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.setLooping(true);
-            }
-        });
-    }
-
-    private void releasePlayer() {
-        vvBackgroundMmf.stopPlayback();
     }
 
     private void onClickStartWordGuess() {
@@ -231,7 +155,7 @@ public class MainMenuFragment extends Fragment {
             });
         } else {
             activity.startTransition(false);
-            activity.displayDialog("Error", "No internet availableHARDCODEDDDD", R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
+            activity.displayDialog("Error", getResources().getString(R.string.popup_no_internet), R.drawable.pdlg_icon_close, R.color.pdlg_color_red);
         }
     }
 
