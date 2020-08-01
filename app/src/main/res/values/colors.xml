@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <!--Main Pallette-->
+    <!--Main Pallette-->DAE4FF
+    <color name="background_launch_color">#DAE4FF</color>
     <color name="celeste_opaque">#BDFFFD</color>
     <color name="celeste">#9FFFF5</color>
     <color name="aquamarine">#7CFFC4</color>

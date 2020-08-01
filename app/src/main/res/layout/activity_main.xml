@@ -2,11 +2,12 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundStyle"
     android:id="@+id/colMainActivityMa"
-    android:fitsSystemWindows="true"
+    style="@style/BackgroundStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="fill"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <com.github.rahatarmanahmed.cpv.CircularProgressView
@@ -14,28 +15,33 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:elevation="5dp"
         android:visibility="gone"
         app:cpv_animAutostart="true"
         app:cpv_indeterminate="true"
-        android:layout_gravity="center"/>
+        app:cpv_thickness="5dp" />
 
-        <VideoView
-            android:id="@+id/vvBackgroundMmf"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="fill"/>
+    <VideoView
+        android:id="@+id/vvBackgroundMmf"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill" />
 
-        <ImageView
-            android:id="@+id/iivIntroBackgroundMmf"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@mipmap/intro_background_main_menu_screen"/>
+    <ImageView
+        android:id="@+id/iivIntroBackgroundMmf"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/intro_background_main_menu_screen" />
 
     <FrameLayout
         android:id="@+id/flMainFragmentContainerMa"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/background_launch_color"
+        android:layout_gravity="fill"
+        android:clipChildren="false"
+        android:clipToPadding="false" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

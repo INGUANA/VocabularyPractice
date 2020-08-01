@@ -31,9 +31,8 @@
     <include
         layout="@layout/layout_image_button_iconics"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_height_medium"
         android:layout_marginEnd="@dimen/margin_end"
-        android:layout_marginBottom="@dimen/margin_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

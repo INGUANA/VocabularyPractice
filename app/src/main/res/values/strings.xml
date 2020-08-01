@@ -10,6 +10,7 @@
     <string name="fragment_main_menu_english_to_japanese">Eng to Jap</string>
     <string name="fragment_main_menu_start">Start</string>
     <string name="fragment_main_menu_tooltip_text_settings">Select which language the known word is from, and to what language you will be trying to translate it.</string>
+    <string name="fragment_main_menu_app_version">Version: %1$s</string>
 
     <!--Word Guess Fragment-->
     <string name="fragment_word_guess_see_translation">See Translation</string>
@@ -45,8 +46,6 @@
     <string name="popup_no_translation_retrieved">Could not get translation, check internet connectivity and retry.</string>
     <string name="popup_no_translation_retrieved_fail_response">Could not get translation, check internet connectivity and retry.</string>
     <string name="popup_word_missspell_warning">There is a word that is misspelled, or could not get translated.</string>
-
-
 
     <string name="snackbar_create_module_success">New Module created successfully!</string>
     <string name="snackbar_edit_module_success">Module has been updated!</string>

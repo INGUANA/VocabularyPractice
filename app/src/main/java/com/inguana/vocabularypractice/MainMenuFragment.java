@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
@@ -41,7 +42,7 @@ public class MainMenuFragment extends BaseFragment {
     private Button btStartMmf, btSettingsMmf, btModuleListMmf;
     private ImageButton ibSettingsInformationMmf;
     private TranslationMode translationMode;
-    //private TextView tvTooltipTextMmf;
+    private TextView tvAppVersionMmf;
     private StorageReference mStorageRef;
     private MainActivity activity;
     private Task firebaseTask;
@@ -56,7 +57,7 @@ public class MainMenuFragment extends BaseFragment {
         btSettingsMmf = view.findViewById(R.id.btSettingsMmf);
         btModuleListMmf = view.findViewById(R.id.btModuleListMmf);
 
-        //tvTooltipTextMmf = view.findViewById(R.id.tvTooltipTextMmf);
+        tvAppVersionMmf = view.findViewById(R.id.tvAppVersionMmf);
 
         ibSettingsInformationMmf = view.findViewById(R.id.ibSettingsInformationMmf);
         vvBackgroundMmf = view.findViewById(R.id.vvBackgroundMmf);
@@ -99,6 +100,7 @@ public class MainMenuFragment extends BaseFragment {
         });
 
         ibSettingsInformationMmf.setOnClickListener(v -> onClickViewToolTip());
+        tvAppVersionMmf.setText(getResources().getString(R.string.fragment_main_menu_app_version, BuildConfig.VERSION_NAME));
 
         return view;
     }

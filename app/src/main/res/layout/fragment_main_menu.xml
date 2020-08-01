@@ -4,6 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/iivAppLogoMmf"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/vocabulary_practice_main_menu_logo"
+        app:layout_constraintBottom_toTopOf="@+id/btStartMmf"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <Button
         android:id="@+id/btStartMmf"
         android:layout_width="@dimen/button_width"
@@ -64,16 +74,14 @@
         app:layout_constraintBottom_toBottomOf="@id/btSettingsMmf"
         app:layout_constraintStart_toEndOf="@id/btSettingsMmf"/>
 
-    <!--<TextView
-        android:id="@+id/tvTooltipTextMmf"
-        android:layout_width="@dimen/popup_width"
+    <TextView
+        android:id="@+id/tvAppVersionMmf"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:text="@string/fragment_main_menu_tooltip_text_settings"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/ibSettingsInformationMmf"
-        app:layout_constraintStart_toStartOf="@id/ibSettingsInformationMmf"
-        app:layout_constraintEnd_toEndOf="parent"/>-->
+        android:text="@string/fragment_main_menu_app_version"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

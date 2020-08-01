@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/clWordGuessFragmentFwg"
+    android:fitsSystemWindows="true"
+    android:layout_gravity="fill"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -99,6 +101,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/green_sheen"
+        android:orientation="vertical"
+        android:scaleType="fitXY"
         android:elevation="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

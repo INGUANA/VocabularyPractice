@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
@@ -44,8 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private CircularProgressView pbProgressBarMa;
     private VideoView vvBackgroundMmf;
     private ImageView iivIntroBackgroundMmf;
+    private FrameLayout flMainFragmentContainerMa;
     public AppDatabase DBInstance;
     public APIInterface apiInterface;
+    public boolean isSplashScreenDone;
     public static final String MAIN_MENU_FRAGMENT_TAG = "MAIN_MENU_FRAGMENT";
     public static final String WORD_GUESS_FRAGMENT_TAG = "WORD_GUESS_FRAGMENT";
     public static final String CREATE_MODULE_FRAGMENT_TAG = "CREATE_MODULE_FRAGMENT";
@@ -73,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         overlayDialog.setCancelable(true);
         vvBackgroundMmf = findViewById(R.id.vvBackgroundMmf);
         iivIntroBackgroundMmf = findViewById(R.id.iivIntroBackgroundMmf);
+        flMainFragmentContainerMa = findViewById(R.id.flMainFragmentContainerMa);
 
         translationPairList = new ArrayList<>();
         sourcePairList = new ArrayList<>();
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         JsonGetter.getRetrofitInstance(); //needs fixing
         apiInterface = JsonGetter.buildService(APIInterface.class);
+        isSplashScreenDone = false;
     }
 
     @Override
@@ -93,13 +98,13 @@ public class MainActivity extends AppCompatActivity {
         initialize();
 
         currentMainFragment = MAIN_MENU_FRAGMENT_TAG;
-        getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragmentContainerMa, new MainMenuFragment(), currentMainFragment)/*.addToBackStack(null)*/.commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.flMainFragmentContainerMa, isSplashScreenDone ? new MainMenuFragment() : new FragmentSplashScreen(), currentMainFragment)/*.addToBackStack(null)*/.commit();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        initializePlayer();
+        //initializePlayer();
     }
 
     @Override
@@ -116,7 +121,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initializePlayer() {
+    public void initializePlayer() {
+        flMainFragmentContainerMa.setBackground(null);
+
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.main_menu_screen_loop);
         vvBackgroundMmf.setVideoURI(uri);
         vvBackgroundMmf.start();
