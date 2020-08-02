@@ -1,5 +1,7 @@
 # VocabularyPractice
 
+Learning a new language? Cool! Check your learning progress by guessing words.
+
 This project aims to replicate the vocal/memory process of learning new words of a foreign language. By showing words in one language, the user guesses the translation, and once he does, he can view it to see if he was right. ***BETA** Version supports only **English to Japanese**, in future releases there will be more options.*
 
 ## Use of the App:
