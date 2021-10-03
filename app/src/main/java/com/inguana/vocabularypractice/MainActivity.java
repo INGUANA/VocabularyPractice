@@ -9,7 +9,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         JsonGetter.getRetrofitInstance(); //needs fixing
         apiInterface = JsonGetter.buildService(APIInterface.class);
-        isSplashScreenDone = false;
     }
 
     @Override
@@ -200,10 +200,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean isNetworkAvailable() {
+        boolean result;
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        Network activeNetwork = connectivityManager.getActiveNetwork();
+        if(null == activeNetwork) {
+            result = false;
+        } else {
+            NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork);
+            result = networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH));
+        }
+        return result;
+        //activeNetwork != null && activeNetwork.isConnected();
     }
 
     public void displaySnackBar(String message, int messageDuration) {

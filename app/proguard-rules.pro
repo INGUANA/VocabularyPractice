@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepclassmembers class * {
+    private <fields>;    
+}
+
+-keep public class androidx.appcompat.widget.FitWindowsFrameLayout
+#-keep class android.support.v7.widget.FitWindowsLinearLayout { *; }
+#-keep class android.support.v7.widget.** { *; }

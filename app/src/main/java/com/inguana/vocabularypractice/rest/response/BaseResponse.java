@@ -38,10 +38,12 @@ public class BaseResponse {
         public class Japanese {
             private String word;
             private String reading;
+            private String test;
 
             public Japanese() {
                 this.word = "";
                 this.reading = "";
+                this.test = "";
             }
 
             public String getWord() {
@@ -60,6 +62,13 @@ public class BaseResponse {
                 this.reading = reading;
             }
 
+            public String getTest() {
+                return test;
+            }
+
+            public void setTest(String test) {
+                this.test = test;
+            }
         }
         public String getSlug() {
             return isNullOrEmpty(slug) ? "" : slug;

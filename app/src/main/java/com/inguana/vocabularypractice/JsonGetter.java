@@ -16,13 +16,14 @@ public class JsonGetter {
     //Response{protocol=http/1.1, code=200, message=OK, url=https://jisho.org/api/v1/search/words?keyword=surprise}
 
     //create logger
-    private static HttpLoggingInterceptor logger = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    private static HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
 
     //create OkHttp Client
     private static OkHttpClient.Builder okHttp = new OkHttpClient.Builder().addInterceptor(logger);
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
+            logger.level(HttpLoggingInterceptor.Level.BODY);
             retrofit = new retrofit2.Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
