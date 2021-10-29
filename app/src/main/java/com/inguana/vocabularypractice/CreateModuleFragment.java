@@ -14,12 +14,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.android.material.snackbar.Snackbar;
 import com.inguana.vocabularypractice.CustomExtensions.WordRecyclerViewArrayAdapter;
 import com.inguana.vocabularypractice.Room.Word;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.iconics.view.IconicsTextView;
 

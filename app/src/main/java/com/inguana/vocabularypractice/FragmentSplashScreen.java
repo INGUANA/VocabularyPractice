@@ -4,6 +4,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class FragmentSplashScreen extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Handler handler = new Handler();
+        Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             public void run() {
                 initializePlayer();
@@ -92,7 +93,7 @@ public class FragmentSplashScreen extends BaseFragment {
                     public boolean onInfo(MediaPlayer mp, int what, int extra) {
                         if (MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START == what) {
                             //TODO: try loading the image from start (visible), then elevate it to the right height
-                            Handler handler = new Handler();
+                            Handler handler = new Handler(Looper.getMainLooper());
                             handler.postDelayed(new Runnable() {
                                 public void run() {
                                     ivSplashScreenImageMmf.setVisibility(View.VISIBLE);
@@ -122,7 +123,7 @@ public class FragmentSplashScreen extends BaseFragment {
     }
 
     private void waitAnimation() {
-        Handler handler = new Handler();
+        Handler handler = new Handler(Looper.getMainLooper());
         final Techniques transition = Techniques.FadeOut;
 
         animationSplashBackground = YoYo.with(transition)

@@ -1,6 +1,7 @@
 package com.inguana.vocabularypractice;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,8 +20,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.inguana.vocabularypractice.CustomExtensions.ModuleRecyclerViewArrayAdapter;
 import com.inguana.vocabularypractice.Room.Word;
 import com.inguana.vocabularypractice.rest.response.BaseResponse;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.iconics.view.IconicsTextView;
 
@@ -76,7 +77,8 @@ public class ModuleListFragment extends BaseFragment implements ModuleRecyclerVi
         rvModuleListMlf.setLayoutManager(layoutManager);
 
         IconicsDrawable addNewWordIcon = new IconicsDrawable(getContext(), GoogleMaterial.Icon.gmd_library_add);
-        addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
+        addNewWordIcon.setColorList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.pdlg_color_black)));
+        //addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         iivNewModuleIconMlf.setIcon(addNewWordIcon);
 
         clNewModuleMlf.setOnClickListener(view1 -> {

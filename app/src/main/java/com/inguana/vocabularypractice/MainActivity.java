@@ -21,11 +21,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.ThreeBounce;
 import com.google.android.material.snackbar.Snackbar;
 import com.inguana.vocabularypractice.Room.AppDatabase;
 import com.inguana.vocabularypractice.Room.Migrations.Migration1To2;
-import com.mikepenz.iconics.context.IconicsContextWrapper;
 import com.wajahatkarim3.roomexplorer.RoomExplorer;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private PrettyDialog dialogPopUp;
     private Dialog overlayDialog;
     private CoordinatorLayout colMainActivityMa;
-    private CircularProgressView pbProgressBarMa;
+    private SpinKitView pbProgressBarMa;
     private VideoView vvBackgroundMmf;
     private ImageView iivIntroBackgroundMmf;
     private FrameLayout flMainFragmentContainerMa;
@@ -73,12 +74,14 @@ public class MainActivity extends AppCompatActivity {
         //flMainFragmentContainerMa = findViewById(R.id.flMainFragmentContainerMa);
         colMainActivityMa = findViewById(R.id.colMainActivityMa);
         pbProgressBarMa = findViewById(R.id.pbProgressBarMa);
-        overlayDialog = new Dialog(this, R.style.Theme_AppCompat_Dialog_Transparent);
-        overlayDialog.setCancelable(true);
         vvBackgroundMmf = findViewById(R.id.vvBackgroundMmf);
         iivIntroBackgroundMmf = findViewById(R.id.iivIntroBackgroundMmf);
         flMainFragmentContainerMa = findViewById(R.id.flMainFragmentContainerMa);
 
+        Sprite threeBounce = new ThreeBounce();
+        pbProgressBarMa.setIndeterminateDrawable(threeBounce);
+        overlayDialog = new Dialog(this, R.style.Theme_AppCompat_Dialog_Transparent);
+        overlayDialog.setCancelable(true);
         translationPairList = new ArrayList<>();
         sourcePairList = new ArrayList<>();
         //TODO: check getInstance
@@ -256,8 +259,8 @@ public class MainActivity extends AppCompatActivity {
     //TODO: progressbar alteration
     //TODO: AAE App intro + particles
     //TODO: background color depending on the fragment and intent the user has?
-    @Override
+    /*@Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(IconicsContextWrapper.wrap(newBase));
-    }
+    }*/
 }

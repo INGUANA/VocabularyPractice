@@ -1,6 +1,7 @@
 package com.inguana.vocabularypractice.CustomExtensions;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.inguana.vocabularypractice.R;
 import com.inguana.vocabularypractice.Room.Word;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.Collections;
@@ -68,7 +69,12 @@ public class WordRecyclerViewArrayAdapter extends RecyclerView.Adapter<WordRecyc
             int adaptPos = getAdapterPosition();
 
             IconicsDrawable addNewWordIcon = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_add_circle);
-            addNewWordIcon.color(ContextCompat.getColor(context, R.color.pdlg_color_blue));
+            addNewWordIcon.setColorList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.pdlg_color_blue)));
+            /*IconicsDrawable(this, FontAwesome.Icon.faw_adjust).apply {
+                sizeDp = 24
+                paddingDp = 1
+            }*/
+            //addNewWordIcon.color(ContextCompat.getColor(context, R.color.pdlg_color_blue));
             iconicsImageView.setIcon(addNewWordIcon);
             iconicsImageView.setOnClickListener((View iivView) -> addWordItem(""));
         }

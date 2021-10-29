@@ -1,6 +1,7 @@
 package com.inguana.vocabularypractice;
 
 import android.animation.Animator;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -24,9 +25,9 @@ import com.inguana.vocabularypractice.CustomExtensions.CustomAnimatorListener;
 import com.inguana.vocabularypractice.CustomExtensions.OnSwipeTouchListener;
 import com.inguana.vocabularypractice.Room.Word;
 import com.inguana.vocabularypractice.rest.response.BaseResponse;
-import com.mikepenz.community_material_typeface_library.CommunityMaterial;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial;
+import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.iconics.view.IconicsTextView;
 
@@ -128,12 +129,14 @@ public class WordGuessFragment extends BaseFragment {
         iivAddToModuleLibi.setIcon(addNewWordIcon);
 
         addNewWordIcon = new IconicsDrawable(getContext(), CommunityMaterial.Icon.cmd_chevron_double_right);
-        addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
+        addNewWordIcon.setColorList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.pdlg_color_black)));
+        //addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         addNewWordIcon.setAlpha(200);
         iivSlideRightFwg.setIcon(addNewWordIcon);
 
         addNewWordIcon = new IconicsDrawable(getContext(), CommunityMaterial.Icon.cmd_chevron_double_left);
-        addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
+        addNewWordIcon.setColorList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.pdlg_color_black)));
+        //addNewWordIcon.color(ContextCompat.getColor(getContext(), R.color.pdlg_color_black));
         addNewWordIcon.setAlpha(200);
         iivSlideLeftFwg.setIcon(addNewWordIcon);
 

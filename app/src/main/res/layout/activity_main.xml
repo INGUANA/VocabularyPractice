@@ -10,17 +10,15 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <com.github.rahatarmanahmed.cpv.CircularProgressView
+    <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/pbProgressBarMa"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
+        style="@style/SpinKitView.Large.ThreeBounce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:elevation="5dp"
         android:visibility="gone"
-        app:cpv_animAutostart="true"
-        app:cpv_indeterminate="true"
-        app:cpv_thickness="5dp" />
+        android:elevation="5dp"
+        app:SpinKit_Color="@color/dark_teal" />
 
     <VideoView
         android:id="@+id/vvBackgroundMmf"
@@ -33,7 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@mipmap/intro_background_main_menu_screen" />
+        android:src="@mipmap/intro_background_main_menu_screen"
+        android:contentDescription="@null" />
 
     <FrameLayout
         android:id="@+id/flMainFragmentContainerMa"
