@@ -3,7 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 0
+ext.versionPatch = 1
 ext.versionClassifier = "BETA"
 ext.isSnapshot = false
 ext.minimumSdkVersion = 24
