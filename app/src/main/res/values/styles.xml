@@ -6,6 +6,56 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/CustomFragmentAnimation</item>
+    </style>
+
+    <style name="CustomFragmentAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:fragmentOpenEnterAnimation">@anim/anim_left_enter</item>
+        <item name="android:fragmentOpenExitAnimation">@anim/anim_left_exit</item>
+        <item name="android:fragmentCloseEnterAnimation">@anim/anim_right_exit</item>
+        <item name="android:fragmentCloseExitAnimation">@anim/anim_right_enter</item>
+    </style>
+
+    <style name="Theme.AppCompat.Dialog.Transparent">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="BackgroundStyle">
+        <item name="android:background">@color/ivory</item>
+    </style>
+
+    <style name="WordGuessTextStyle">
+        <item name="android:textSize">@dimen/text_size_average_medium</item>
+        <item name="android:textColor">@color/black_coral</item>
+        <item name="android:textStyle">bold</item>
+        <!--Backgrounds wont work on styles until later version of materials library-->
+        <!--<item name="background">@drawable/button_icon</item>-->
+    </style>
+
+    <style name="ButtonTextStyle">
+        <item name="android:textColor">@color/mardi_grass</item>
+        <item name="android:textSize">@dimen/text_size_average</item>
+        <item name="android:textStyle">bold</item>
+       <!-- <item name="background">@drawable/button_icon</item>-->
+    </style>
+
+    <style name="RecyclerViewTextStyle">
+        <item name="android:textColor">@color/mardi_grass</item>
+        <item name="android:textSize">@dimen/text_size_average</item>
+        <!--<item name="background">@drawable/recycler_view_item_module_icon</item>-->
+
+    </style>
+
+    <style name="TitleTextStyle">
+        <item name="android:textColor">@color/mardi_grass</item>
+        <item name="android:textSize">@dimen/text_size_average_xmedium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="HeaderInfoTextStyle">
+        <item name="android:textColor">@color/black_coral</item>
+        <item name="android:textSize">@dimen/text_size_average_medium_small</item>
+        <item name="android:gravity">center</item>
     </style>
 
 </resources>

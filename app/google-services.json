@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "966780979361",
+    "firebase_url": "https://vocabularypractice-dae13.firebaseio.com",
+    "project_id": "vocabularypractice-dae13",
+    "storage_bucket": "vocabularypractice-dae13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966780979361:android:c0bb57382952d406d248e0",
+        "android_client_info": {
+          "package_name": "com.inguana.vocabularypractice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966780979361-2q12475l6kuf0k5hij1j64ojmicjde0f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inguana.vocabularypractice",
+            "certificate_hash": "bd08fa3150e62711b5a689b3eb639b2d9a48d4e9"
+          }
+        },
+        {
+          "client_id": "966780979361-53vevv63igncokecrvl8kti61j2sfeqj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTVAKE9uinjQkdhz4Tb5jU8cwDRU0E8Kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966780979361-53vevv63igncokecrvl8kti61j2sfeqj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

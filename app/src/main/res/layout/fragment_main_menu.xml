@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iivAppLogoMmf"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@mipmap/vocabulary_practice_main_menu_logo"
+        app:layout_constraintBottom_toTopOf="@+id/btStartMmf"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <Button
+        android:id="@+id/btStartMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/fragment_main_menu_start"
+        android:background="@drawable/button_icon"
+        app:layout_constraintBottom_toTopOf="@+id/btSettingsMmf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/btSettingsMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/margin_top_button"
+        android:text="@string/fragment_main_menu_english_to_japanese"
+        android:clickable="false"
+        android:enabled="false"
+        android:background="@drawable/button_icon_submerged"
+        android:alpha="0.5"
+        app:layout_constraintBottom_toTopOf="@+id/btModuleListMmf"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btStartMmf" />
+
+    <Button
+        android:id="@+id/btModuleListMmf"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/margin_top_button"
+        android:text="@string/fragment_main_menu_create_module"
+        android:background="@drawable/button_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btSettingsMmf" />
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="@dimen/margin_end"
+        android:layout_marginBottom="@dimen/margin_bottom"
+        app:iiv_color="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- TODO: image info icon-->
+    <ImageButton
+        android:id="@+id/ibSettingsInformationMmf"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="@dimen/margin_start"
+        android:background="@drawable/pdlg_icon_info"
+        android:backgroundTint="@color/aquamarine"
+        app:layout_constraintTop_toTopOf="@id/btSettingsMmf"
+        app:layout_constraintBottom_toBottomOf="@id/btSettingsMmf"
+        app:layout_constraintStart_toEndOf="@id/btSettingsMmf"/>
+
+    <TextView
+        android:id="@+id/tvAppVersionMmf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fragment_main_menu_app_version"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

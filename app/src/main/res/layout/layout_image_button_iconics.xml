@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/clButtonLayoutLibi"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/iivButtonIconLibi"
+        android:layout_width="@dimen/box_width"
+        android:layout_height="@dimen/box_height_small"
+        android:layout_marginEnd="@dimen/margin_end_small"
+        android:tint="@color/mardi_grass"
+        app:layout_constraintEnd_toStartOf="@id/itvTextButtonIconLibi"
+        app:layout_constraintTop_toTopOf="@id/itvTextButtonIconLibi" />
+
+    <com.mikepenz.iconics.view.IconicsTextView
+        android:id="@+id/itvTextButtonIconLibi"
+        style="@style/ButtonTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/button_height_medium"
+        android:text="@string/fragment_create_module_create_new_module"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
