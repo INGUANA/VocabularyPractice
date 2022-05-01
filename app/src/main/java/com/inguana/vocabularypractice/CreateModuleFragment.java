@@ -48,6 +48,7 @@ public class CreateModuleFragment extends BaseFragment {
     private IconicsDrawable addNewWordIcon;
     private List<Word> wordObjectList;
     private List<String> wordList;
+    private String test2;
 
     public void initialize(View view, ViewGroup container) {
         fragmentContainerId = container.getId();
