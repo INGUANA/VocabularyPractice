@@ -49,6 +49,7 @@ public class CreateModuleFragment extends BaseFragment {
     private List<Word> wordObjectList;
     private List<String> wordList;
     private String test2;
+    private String test3;
 
     public void initialize(View view, ViewGroup container) {
         fragmentContainerId = container.getId();
