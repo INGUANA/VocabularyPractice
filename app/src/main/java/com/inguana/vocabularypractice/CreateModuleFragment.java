@@ -46,6 +46,7 @@ public class CreateModuleFragment extends BaseFragment {
     private IconicsImageView iivCreateUpdateNewModuleIconLibi;
     private IconicsTextView itvCreateUpdateNewModuleIconLibi;
     private IconicsDrawable addNewWordIcon;
+    private String test4;
     private List<Word> wordObjectList;
     private List<String> wordList;
     private String test2;
